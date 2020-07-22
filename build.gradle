@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+ext {
+    spring_version = '5.2.6.RELEASE'
+    junit_version = '4.12'
+}
+
+// 定义所有项目共同行为
+allprojects {
+    group = 'com.heqing.demo.spring'
+    version = '1.0-SNAPSHOT'
+    // 指定编译编译.java文件的jdk版本
+    sourceCompatibility = 1.8
+    // 确保class文件与targetCompatibility指定版本，或者更新的java虚拟机兼容
+    targetCompatibility = 1.8
+    // java编译的时候缺省状态下会因为中文字符而失败
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+    // 编译JAVA文件时采用UTF-8
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}
+
+// 定义子项目共同行为
+subprojects {
+    // 添加插件
+    apply plugin: 'maven'
+
+    // 设置仓库
+    repositories {
+        mavenCentral()
+    }
+}
+

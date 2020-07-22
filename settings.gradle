@@ -1,0 +1,4 @@
+rootProject.name = 'demo-spring'
+include 'spring-framework'
+include 'spring-mvc'
+
