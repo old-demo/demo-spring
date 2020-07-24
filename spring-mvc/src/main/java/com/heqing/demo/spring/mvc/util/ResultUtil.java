@@ -78,6 +78,10 @@ public class ResultUtil<T> implements Serializable {
 		return build(-1, msg, null);
 	}
 
+	public static ResultUtil buildError(Integer code, String msg){
+		return build(code, msg, null);
+	}
+
 	/**
 	 * 是否响应成功
 	 * @return

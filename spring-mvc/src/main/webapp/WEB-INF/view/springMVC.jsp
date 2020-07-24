@@ -22,6 +22,7 @@
         <button id="requestBody"    type="button">测试  RequestBody</button><br/>
         <button id="request"        type="button">测试  Request</button><br/>
         <button id="response"       type="button">测试  Response</button><br/>
+        <button id="exception"      type="button">测试  exception</button><br/>
         <br/>
         <input type="file" id="uFile" name="uFile" multiple="multiple"/>
         <button id="uploadAll" type="button">上传文件</button>
@@ -96,6 +97,13 @@
                 success: function(data){
                     console.info(data);
                 }
+            });
+        });
+
+        $("#exception").click(function(){
+            $.ajax({
+                type: "POST",
+                url: "/demo/exception",
             });
         });
 

@@ -1,9 +1,9 @@
 package com.heqing.demo.spring.mvc.controller;
 
+import com.heqing.demo.spring.mvc.aop.DemoException;
 import com.heqing.demo.spring.mvc.model.User;
 import com.heqing.demo.spring.mvc.util.ResultUtil;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +38,8 @@ public class DemoController {
     }
 
     @RequestMapping("/index")
-    public String index() {
-        return "===   链接测试成功了！  ===";
+    public ResultUtil<String> index() {
+        return ResultUtil.buildSuccess("链接测试成功了");
     }
 
     @RequestMapping("/view")
@@ -62,33 +62,39 @@ public class DemoController {
     }
 
     @RequestMapping("/date")
-    public void date(Date date) {
+    public void date(String date) {
+        System.out.println("---------注意：使用切面后，参数未Date类型会报：org.springframework.web.method.annotation.MethodArgumentTypeMismatchExceptio--------");
         System.out.println("===Controller.data===");
         System.out.println("date="+date);
+//        return ResultUtil.buildSuccess();
     }
 
     @RequestMapping("/pathVariable/{id}")
-    public void pathVariable(@PathVariable("id") String id) {
+    public ResultUtil pathVariable(@PathVariable("id") String id) {
         System.out.println("=== DemoController.pathVariable ===");
         System.out.println("id="+id);
+        return ResultUtil.buildSuccess();
     }
 
     @RequestMapping("/requestParam")
-    public void requestParam(@RequestParam(value="name",required=false,defaultValue="heqing") String name, @RequestParam("age") Integer age){
+    public ResultUtil requestParam(@RequestParam(value="name",required=false,defaultValue="heqing") String name, @RequestParam("age") Integer age){
         System.out.println("=== DemoController.requestParam ===");
         System.out.println("name="+name+", age="+age);
+        return ResultUtil.buildSuccess();
     }
 
     @RequestMapping("/requestBody")
-    public void requestBody(@RequestBody List<User> userList){
+    public ResultUtil requestBody(@RequestBody List<User> userList){
         System.out.println("=== DemoController.requestBody ===");
         System.out.println("user="+JSONObject.toJSONString(userList));
+        return ResultUtil.buildSuccess();
     }
 
     @RequestMapping("/request")
-    public void request(@RequestParam("id") Long id,@RequestBody User user){
+    public ResultUtil request(@RequestParam("id") Long id,@RequestBody User user){
         System.out.println("=== DemoController.request ===");
         System.out.println("id="+id+", user="+JSONObject.toJSONString(user));
+        return ResultUtil.buildSuccess();
     }
 
     @RequestMapping("/response")
@@ -102,6 +108,12 @@ public class DemoController {
         user.setCreateTime(new Date());
 
         return  ResultUtil.buildSuccess(user);
+    }
+
+    @RequestMapping("/exception")
+    public ResultUtil exception(){
+        System.out.println("=== DemoController.exception ===");
+        throw new DemoException(-1, "系统错误");
     }
 
     @RequestMapping("/upload")

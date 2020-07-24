@@ -2,16 +2,15 @@ package com.heqing.demo.spring.mvc.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heqing.demo.spring.mvc.util.WebUtil;
-import org.springframework.util.StringUtils;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 
-//直接在类名称的上端写入即可，value中指定要引入的拦截器的名称即可
+/**
+ * 直接在类名称的上端写入即可，value中指定要引入的拦截器的名称即可
+ */
 public class DemoHandlerInterceptor implements HandlerInterceptor {
 
 	/** 
@@ -29,24 +28,6 @@ public class DemoHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("------------1  业务处理器处理之前------------");
-
-        System.out.println("来访者的IP地址：" + WebUtil.getIpAddr(request));
-        System.out.println("请求的URL地址：" + request.getRequestURL().toString());
-        System.out.println("请求的资源：" + request.getRequestURI());
-        System.out.println("请求的URL地址中附带的参数：" + request.getQueryString());
-        System.out.println("请求方式：" + request.getMethod());
-        System.out.println("请求方法：" + handler);
-        System.out.println("请求参数：" + JSONObject.toJSONString(request.getParameterMap()));
-
-        StringBuffer data = new StringBuffer();
-        String line = null;
-        BufferedReader reader = request.getReader();
-        while (null != (line = reader.readLine())) {
-            data.append(line);
-        }
-        System.out.println("请求参数：" + data.toString());
-
-        System.out.println("--------------------------------------------------");
         return true;
     }
  

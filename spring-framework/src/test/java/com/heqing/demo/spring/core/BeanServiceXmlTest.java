@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-        locations = {"classpath*:spring-core.xml"}
+    locations = {"classpath*:spring_core.xml"}
 )
 public class BeanServiceXmlTest {
 
@@ -33,7 +33,7 @@ public class BeanServiceXmlTest {
     public void testXmlBean() {
         System.out.println("----- 测试 通过xml文件装配bean -----");
         // 需要在对应路径的xml中增加 <context:component-scan base-package="com.heqing.demo.*" />
-        ApplicationContext context = new FileSystemXmlApplicationContext("src/main/resources/spring-core.xml");
+        ApplicationContext context = new FileSystemXmlApplicationContext("src/main/resources/spring_core.xml");
         BeanService beanService = context.getBean("beanServiceImpl", BeanService.class);
         beanService.sayHello();
 
