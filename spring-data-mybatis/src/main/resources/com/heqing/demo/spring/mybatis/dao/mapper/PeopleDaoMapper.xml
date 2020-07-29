@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heqing.demo.spring.mybatis.dao.PeopleDao">
+
+    <!-- 添加缓存 ：创建一个每 60 秒刷新一次的 FIFO 缓存，存储 512 个结果对象或列表的引用，并且返回的对象是只读的。  -->
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+
+    <!-- 数据库字段 -->
+    <sql id="peopleFields">
+        id
+        , name
+        , age
+        , gender
+        , create_time
+    </sql>
+
+    <!-- 对象属性 -->
+    <parameterMap id="peopleParameterMap" type="com.heqing.demo.spring.mybatis.model.People">
+        <parameter property="id"/>
+        <parameter property="name"/>
+        <parameter property="age"/>
+        <parameter property="gender"/>
+        <parameter property="createTime"/>
+    </parameterMap>
+
+    <!-- 数据库字段与对象属性映射 -->
+    <resultMap id="peopleResultMap" type="com.heqing.demo.spring.mybatis.model.People">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="age" column="age" />
+        <result property="gender" column="gender" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <!-- 增加 -->
+    <insert id="savePeople" parameterMap="peopleParameterMap" >
+        INSERT INTO
+          people( <include refid="peopleFields"/> )
+        VALUES ( ? , ? , ? , ? , ?);
+    </insert>
+
+    <!-- 增加多条 -->
+    <insert id="saveBatchPeople" parameterType="java.util.List">
+        INSERT INTO
+          people( <include refid="peopleFields"/> )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+              #{item.id}
+              ,#{item.name}
+              ,#{item.age}
+              ,#{item.gender}
+              ,#{item.createTime}
+            )
+        </foreach>
+        ;
+    </insert>
+
+    <!-- 根据主键修改 -->
+    <update id="updatePeopleByKey" parameterMap="peopleParameterMap">
+        UPDATE
+        people
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="name != null and name !=''">, name=#{name}</if>
+            <if test="age != null and age != ''">, age=#{age}</if>
+            <if test="gender != null and gender !=''">, gender=#{gender}</if>
+            <if test="createTime != null">, create_time=#{createTime}</if>
+        </trim>
+        <where>
+            AND id=#{id}
+        </where>
+        ;
+    </update>
+
+    <!-- 根据主键获取 -->
+    <select id="getPeopleByKey" parameterType="java.util.Map" resultMap="peopleResultMap">
+        SELECT
+        <include refid="peopleFields"/>
+        FROM people
+        <where>
+            AND id=#{id}
+        </where>
+    </select>
+
+    <!-- 获取所有 -->
+    <select id="listPeople" resultMap="peopleResultMap">
+        SELECT
+          <include refid="peopleFields"/>
+        FROM people
+        ORDER BY
+           id DESC
+    </select>
+
+    <!-- 根据条件获取多条 -->
+    <select id="listPeopleByParam" parameterType="java.util.Map" resultMap="peopleResultMap">
+        SELECT
+          <include refid="peopleFields"/>
+        FROM people
+        <where>
+           <if test="id != null and id != ''"> AND id=#{id} </if>
+           <if test="name != null and name != ''"> AND name=#{name} </if>
+           <if test="age != null and age != ''"> AND age=#{age} </if>
+           <if test="gender != null and gender != ''"> AND gender=#{gender} </if>
+           <if test="createTime != null"> AND date(create_time)=date(#{createTime,jdbcType=TIMESTAMP}) </if>
+         </where>
+        ORDER BY
+           id DESC
+    </select>
+
+    <!-- 根据多个主键获取 -->
+    <select id="listPeopleByKey" parameterType="java.util.List" resultMap="peopleResultMap">
+        SELECT <include refid="peopleFields"/>
+        FROM people
+        WHERE id IN
+        <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ;
+    </select>
+
+    <!-- 根据主键删除 -->
+    <delete id="deletePeopleByKey" parameterType="java.util.Map">
+        DELETE FROM people
+        WHERE id=#{id};
+    </delete>
+
+    <!-- 根据多个主键删除多条 -->
+    <delete id="deleteBatchPeopleByKey" parameterType="java.util.List">
+        DELETE FROM people
+        WHERE id IN
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ;
+    </delete>
+
+    <!-- 根据条件删除多条 -->
+    <delete id="deletePeopleByParam" parameterMap="peopleParameterMap">
+        DELETE FROM people
+        <where>
+            <if test="id != null and id != ''"> AND id=#{id} </if>
+            <if test="name != null and name != ''"> AND name=#{name} </if>
+            <if test="age != null and age != ''"> AND age=#{age} </if>
+            <if test="gender != null and gender != ''"> AND gender=#{gender} </if>
+            <if test="createTime != null"> AND date(create_time)=date(#{createTime,jdbcType=TIMESTAMP}) </if>
+        </where>
+        ;
+    </delete>
+</mapper>

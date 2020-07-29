@@ -9,13 +9,14 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-webmvc', version: spring_version
     compile group: 'org.springframework', name: 'spring-aop', version: spring_version
     compile group: 'org.springframework', name: 'spring-aspects', version: spring_version
-    // 阿里Json框架
-    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.70'
     // 文件上传
     compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
-
     providedCompile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+    // 阿里Json框架
+    compile group: 'com.alibaba', name: 'fastjson', version: fastjson_version
+    // 日志框架
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: log4j_version
 
     testCompile group: 'junit', name: 'junit', version: junit_version
     testCompile group: 'org.springframework', name: 'spring-test', version: spring_version

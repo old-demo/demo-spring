@@ -3,7 +3,15 @@ plugins {
 }
 
 ext {
+    // spring 框架版本
     spring_version = '5.2.6.RELEASE'
+    // 阿里Json工具包版本
+    fastjson_version = '1.2.70'
+    // 构造器版本
+    lombok_version = '1.18.12'
+    // 日志版本
+    log4j_version = '1.7.30'
+    // 单元测试包版本
     junit_version = '4.12'
 }
 

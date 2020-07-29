@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	 <!-- 加载外部的properties配置文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+
+	<!-- 配置数据库连接池（druid） 整合其他框架, 事务等 -->
+	<!-- 1. 数据源 : DriverManagerDataSource -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	    <!-- 基本信息 -->
+		<property name="url"       		  value="${jdbcUrl}"></property>
+		<property name="driverClassName"  value="${driverClass}"></property>
+		<property name="username"         value="${user}"></property>
+		<property name="password"      	  value="${password}"></property>
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" 	  value="${initialSize}" />
+		<property name="minIdle" 	 	  value="${minIdle}" />
+		<property name="maxActive"   	  value="${maxActive}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait"     	  value="${maxWait}" />
+		<property name="validationQuery"  value="${validationQuery}" />
+		<property name="testWhileIdle" 	  value="${testWhileIdle}" />
+		<property name="testOnBorrow" 	  value="${testOnBorrow}" />
+		<property name="testOnReturn" 	  value="${testOnReturn}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis"    value="${minEvictableIdleTimeMillis}" />
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" 	   value="${poolPreparedStatements}" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"   value="${maxPoolPreparedStatementPerConnectionSize}" />
+	</bean>
+
+	<!-- 2. mybatis的SqlSession的工厂: SqlSessionFactoryBean dataSource / typeAliasesPackage -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.heqing.demo.spring.mybatis.dao,com.heqing.demo.spring.mybatis.mapper" />
+		<!-- 自动扫描 mapping.xml 文件 -->
+		<property name="mapperLocations" value="classpath:com/heqing/demo/spring/mybatis/dao/mapper/*.xml" />
+		<!-- 配置mybatis分页插件PageHelper -->
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<property name="properties">
+						<value>helperDialect=mysql</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- 3. mybatis自动扫描加载Sql映射文件 : MapperScannerConfigurer sqlSessionFactory(已过时，目前使用sqlSessionFactoryBeanName)
+        / basePackage(接口映射文件所在的包) -->
+	<bean id="config" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+		<property name="basePackage" value="com.heqing.demo.spring.mybatis.dao,com.heqing.demo.spring.mybatis.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<!-- 4. 事务管理 : DataSourceTransactionManager -->
+	<bean id="manager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 5. 使用声明式事务 -->
+	<tx:annotation-driven transaction-manager="manager" />
+</beans>

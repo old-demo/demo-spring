@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heqing.demo.spring.mybatis.dao.SchoolClassDao">
+
+    <sql id="schoolClassFields">
+   		id, name, head_teacher_id, class_director_id, class_director_name
+    </sql>
+
+    <!-- 对象属性 -->
+    <parameterMap id="schoolClassParameterMap" type="com.heqing.demo.spring.mybatis.model.SchoolClass">
+        <parameter property="id"/>
+        <parameter property="name"/>
+        <parameter property="headTeacherId"/>
+        <parameter property="classDirectorId"/>
+        <parameter property="classDirectorName"/>
+    </parameterMap>
+
+    <resultMap id="schoolClassResult" type="com.heqing.demo.spring.mybatis.model.SchoolClass" >
+        <id     column="id"                 property="id"/>
+        <result column="name"               property="name"/>
+        <result column="head_teacher_id"    property="headTeacherId"/>
+        <result column="class_director_id"  property="classDirectorId"/>
+        <result column="class_director_name"    property="classDirectorName"/>
+    </resultMap>
+
+    <insert id="save" parameterMap="schoolClassParameterMap" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO
+        school_class( <include refid="schoolClassFields"/> )
+        VALUES (?, ?, ?, ?);
+    </insert>
+
+    <select id="getSchoolClassById" parameterType="Long" resultMap="schoolClassResult">
+        SELECT
+            <include refid="schoolClassFields"/>
+        FROM school_class
+        WHERE id = #{id}
+    </select>
+
+    <select id="getSchoolClassByHeadTeacherId" parameterType="Long" resultMap="schoolClassResult">
+        SELECT
+            <include refid="schoolClassFields"/>
+        FROM school_class
+        WHERE head_teacher_id = #{id}
+    </select>
+
+    <select id="listSchoolClassByDirector" parameterType="java.util.Map" resultMap="schoolClassResult">
+        SELECT
+            <include refid="schoolClassFields"/>
+        FROM school_class
+        WHERE class_director_id = #{teacher.id}
+          <if test="teacher.name != null and teacher.name != ''"> AND class_director_name = #{teacher.name} </if>
+    </select>
+
+    <select id="listSchoolClassByTeacherId" parameterType="Long" resultMap="schoolClassResult">
+        SELECT
+          c.*
+        FROM school_class c
+        LEFT JOIN teacher_class tc
+          ON c.id = tc.class_id
+        WHERE tc.teacher_id = #{id}
+    </select>
+</mapper>

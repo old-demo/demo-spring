@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heqing.demo.spring.mybatis.dao.TeacherDao">
+
+    <sql id="teacherFields">
+   		id, name
+    </sql>
+
+    <!-- 对象属性 -->
+    <parameterMap id="teacherParameterMap" type="com.heqing.demo.spring.mybatis.model.Teacher">
+        <parameter property="id"/>
+        <parameter property="name"/>
+    </parameterMap>
+
+    <resultMap id="teacherResult" type="com.heqing.demo.spring.mybatis.model.Teacher" >
+        <id 	 	 column="id"    property="id"/>
+        <result 	 column="name"  property="name"/>
+        <association column="id" property="superviseSchoolClass"
+                     javaType="com.heqing.demo.spring.mybatis.model.SchoolClass" select="com.heqing.demo.spring.mybatis.dao.SchoolClassDao.getSchoolClassByHeadTeacherId"/>
+        <collection column="{teacher.id=id,teacher.name=name}" property="schoolClassDirector"
+                    ofType="com.heqing.demo.spring.mybatis.model.SchoolClass" select="com.heqing.demo.spring.mybatis.dao.SchoolClassDao.listSchoolClassByDirector"/>
+        <collection column="id" property="teachSchoolClasses"
+                    ofType="com.heqing.demo.spring.mybatis.model.SchoolClass" select="com.heqing.demo.spring.mybatis.dao.SchoolClassDao.listSchoolClassByTeacherId"/>
+    </resultMap>
+
+    <insert id="save" parameterMap="teacherParameterMap" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO
+        teacher( <include refid="teacherFields"/> )
+        VALUES ( ? , ?);
+    </insert>
+
+    <select id="getTeacherById" parameterType="Long" resultMap="teacherResult">
+        SELECT
+        <include refid="teacherFields"/>
+        FROM teacher
+        WHERE id = #{id}
+    </select>
+
+</mapper>

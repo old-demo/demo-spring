@@ -15,11 +15,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author heqing
@@ -125,4 +127,13 @@ public class SpringMvcConfig implements WebMvcConfigurer {
         return commonsMultipartResolver;
     }
 
+    @Bean
+    public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
+          // 设置统一错误处理要跳转的视图
+          SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
+          Properties properties = new Properties();
+          properties.getProperty("java.lang.Exception", "error");
+          simpleMappingExceptionResolver.setExceptionMappings(properties);
+          return simpleMappingExceptionResolver;
+    }
 }

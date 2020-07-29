@@ -1,10 +1,11 @@
 package com.heqing.demo.spring.mvc.aop;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.heqing.demo.spring.mvc.util.ResultUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,11 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Date;
 
 @Aspect
 @Component
 public class DemoControllerAop {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DemoControllerAop.class);
 
     @Pointcut("execution(public * com.heqing.demo.spring.mvc.controller..*(..)) && !execution(* com.heqing.demo.spring.mvc.controller.DemoController.modelAttribute(..))")
     public void controller(){}
@@ -47,7 +49,7 @@ public class DemoControllerAop {
                     parameString = parameString.substring(0, parameString.length()-1);
                 }
             }
-            System.out.println("--接口请求--> 类名:" + className + ", 方法名:" + methodName + ", 入参：" + parameString);
+            LOGGER.info("--接口请求--> 类名:{}, 方法名:{}, 入参：{}", className, methodName, parameString);
         } catch (Exception e) {
             // log
             return ResultUtil.buildError();
@@ -77,7 +79,7 @@ public class DemoControllerAop {
         } catch (Throwable throwable) {
             result = ResultUtil.buildError(throwable.getMessage());
         }
-        System.out.println("--接口响应--> 类名:" + className + ", 方法名:" + methodName + ", 出参："+ JSONObject.toJSONString(result) + ", 响应时间：" + (System.currentTimeMillis()-startTime));
+        LOGGER.info("--接口响应--> 类名:{}, 方法名:{}, 出参：{},响应时间：{}", className, methodName, JSONObject.toJSONString(result), (System.currentTimeMillis()-startTime));
         return result;
     }
 
