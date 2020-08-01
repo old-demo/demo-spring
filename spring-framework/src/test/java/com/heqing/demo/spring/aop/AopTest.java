@@ -18,6 +18,9 @@ public class AopTest {
     @Autowired
     AopService aopService;
 
+    @Autowired
+    DemoService demoService;
+
     @Test
     public void testReture() {
         System.out.println("----- 测试 正常切面 -----");
@@ -34,5 +37,10 @@ public class AopTest {
     public void testEx() {
         System.out.println("----- 测试 异常情况 -----");
         aopService.testEx();
+    }
+
+    @Test
+    public void testOrder() {
+        demoService.order();
     }
 }

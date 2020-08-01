@@ -2,4 +2,5 @@ rootProject.name = 'demo-spring'
 include 'spring-framework'
 include 'spring-mvc'
 include 'spring-data-mybatis'
+include 'spring-data-hibernate'
 
