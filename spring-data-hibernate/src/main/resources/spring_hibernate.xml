@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	 <!-- 加载外部的properties配置文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+
+	<!-- 配置数据库连接池（druid） 整合其他框架, 事务等 -->
+	<!-- 1. 数据源 : DriverManagerDataSource -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	    <!-- 基本信息 -->
+		<property name="url"       		  value="${jdbcUrl}"></property>
+		<property name="driverClassName"  value="${driverClass}"></property>
+		<property name="username"         value="${user}"></property>
+		<property name="password"      	  value="${password}"></property>
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" 	  value="${initialSize}" />
+		<property name="minIdle" 	 	  value="${minIdle}" />
+		<property name="maxActive"   	  value="${maxActive}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait"     	  value="${maxWait}" />
+		<property name="validationQuery"  value="${validationQuery}" />
+		<property name="testWhileIdle" 	  value="${testWhileIdle}" />
+		<property name="testOnBorrow" 	  value="${testOnBorrow}" />
+		<property name="testOnReturn" 	  value="${testOnReturn}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis"    value="${minEvictableIdleTimeMillis}" />
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" 	   value="${poolPreparedStatements}" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"   value="${maxPoolPreparedStatementPerConnectionSize}" />
+		<!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->
+		<property name="filters" value="stat" />
+	</bean>
+
+	<!-- 配置hibernate的SessionFactory -->
+	<bean id="sessionFactory"
+		  class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<!-- 注入数据源 相关信息看源码 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- hibernate配置信息 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+
+		<!-- 扫描hibernate注解配置的entity -->
+		<!--<property name="packagesToScan" value="com.heqing.demo.spring.hibernate.model" />-->
+
+		<!-- 扫描hibernate注解XML配置的entity -->
+		<property name="configLocation" value="com/heqing/demo/spring/hibernate/hibernate.cfg.xml"></property>
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		  class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- 使用声明式事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<!--  配置事务传播特性 -->
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="list*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="load*" propagation="SUPPORTS" read-only="true" />
+
+			<!-- 其他采用默认事务方式 -->
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+
+</beans>

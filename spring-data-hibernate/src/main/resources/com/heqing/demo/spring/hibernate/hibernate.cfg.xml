@@ -1,0 +1,14 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+<session-factory>
+
+	<!-- 导入映射配置 -->
+	<mapping resource="com/heqing/demo/spring/hibernate/dao/PeopleXml.hbm.xml" />
+	<mapping resource="com/heqing/demo/spring/hibernate/dao/SchoolClassXml.hbm.xml" />
+	<mapping resource="com/heqing/demo/spring/hibernate/dao/TeacherXml.hbm.xml" />
+
+</session-factory>
+</hibernate-configuration>

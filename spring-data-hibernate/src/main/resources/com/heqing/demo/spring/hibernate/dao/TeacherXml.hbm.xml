@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.heqing.demo.spring.hibernate.model.TeacherXml" table="teacher">
+        <id name="id">
+            <generator class="native" >
+
+            </generator>
+        </id>
+        <property name="name"/>
+
+        <one-to-one name="superviseSchoolClass" property-ref="headTeacher" class="com.heqing.demo.spring.hibernate.model.SchoolClassXml"></one-to-one>
+
+        <set name="schoolClassDirectorList"  lazy="false">
+            <key column="class_director_id"></key>
+            <one-to-many class="com.heqing.demo.spring.hibernate.model.SchoolClassXml"/>
+        </set>
+
+        <set name="teachSchoolClassesList" table="teacher_class" cascade="all" lazy="false">
+            <key column="teacher_id"></key>
+            <many-to-many class="com.heqing.demo.spring.hibernate.model.SchoolClassXml" column="class_id"></many-to-many>
+        </set>
+    </class>
+
+</hibernate-mapping>

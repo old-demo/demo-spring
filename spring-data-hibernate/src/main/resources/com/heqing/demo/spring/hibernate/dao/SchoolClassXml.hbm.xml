@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.heqing.demo.spring.hibernate.model.SchoolClassXml" table="school_class">
+        <id name="id">
+            <generator class="native">
+            </generator>
+        </id>
+        <property name="name"/>
+        <property name="classDirectorName" column="class_director_name"/>
+
+        <!-- 双向一对一外键关系 跟多对一一样，只是增加了一个unique属性。这样就指定了这端为一了。 参考：https://www.cnblogs.com/whgk/p/6128395.html-->
+        <many-to-one name="headTeacher" column="head_teacher_id" unique="true" lazy="false" ></many-to-one>
+
+        <many-to-one name="classDirector" class="com.heqing.demo.spring.hibernate.model.TeacherXml" column="class_director_id" lazy="false"></many-to-one>
+
+        <set name="teacherList" table="teacher_class" cascade="all" lazy="false">
+            <key column="class_id"></key>
+            <many-to-many class="com.heqing.demo.spring.hibernate.model.TeacherXml" column="teacher_id"></many-to-many>
+        </set>
+    </class>
+
+</hibernate-mapping>
