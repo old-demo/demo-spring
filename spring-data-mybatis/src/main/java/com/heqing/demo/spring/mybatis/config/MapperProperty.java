@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource("classpath:mapper.properties")
 @Data
-public class MapperConfig {
+public class MapperProperty {
 
     @Value("${typeAliasesPackage}")
     private String typeAliasesPackage;

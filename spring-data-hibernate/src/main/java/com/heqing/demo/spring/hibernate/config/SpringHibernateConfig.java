@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -22,24 +21,24 @@ public class SpringHibernateConfig {
      * 配置数据源
      **/
     @Bean
-    public DataSource dataSource(JDBCConfig jdbcConfig) {
+    public DataSource dataSource(DBProperty dBProperty) {
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setUsername(jdbcConfig.getUser());
-        dataSource.setPassword(jdbcConfig.getPassword());
-        dataSource.setUrl(jdbcConfig.getUrl());
-        dataSource.setDriverClassName(jdbcConfig.getDriverClass());
-        dataSource.setInitialSize(jdbcConfig.getInitialSize());
-        dataSource.setMinIdle(jdbcConfig.getMinIdle());
-        dataSource.setMaxActive(jdbcConfig.getMaxActive());
-        dataSource.setMaxWait(jdbcConfig.getMaxWait());
-        dataSource.setValidationQuery(jdbcConfig.getValidationQuery());
-        dataSource.setTestWhileIdle(jdbcConfig.getTestWhileIdle());
-        dataSource.setTestOnBorrow(jdbcConfig.getTestOnBorrow());
-        dataSource.setTestOnReturn(jdbcConfig.getTestOnReturn());
-        dataSource.setTimeBetweenEvictionRunsMillis(jdbcConfig.getTimeBetweenEvictionRunsMillis());
-        dataSource.setMinEvictableIdleTimeMillis(jdbcConfig.getMinEvictableIdleTimeMillis());
-        dataSource.setPoolPreparedStatements(jdbcConfig.getPoolPreparedStatements());
-        dataSource.setMaxPoolPreparedStatementPerConnectionSize(jdbcConfig.getMaxPoolPreparedStatementPerConnectionSize());
+        dataSource.setUsername(dBProperty.getUser());
+        dataSource.setPassword(dBProperty.getPassword());
+        dataSource.setUrl(dBProperty.getUrl());
+        dataSource.setDriverClassName(dBProperty.getDriverClass());
+        dataSource.setInitialSize(dBProperty.getInitialSize());
+        dataSource.setMinIdle(dBProperty.getMinIdle());
+        dataSource.setMaxActive(dBProperty.getMaxActive());
+        dataSource.setMaxWait(dBProperty.getMaxWait());
+        dataSource.setValidationQuery(dBProperty.getValidationQuery());
+        dataSource.setTestWhileIdle(dBProperty.getTestWhileIdle());
+        dataSource.setTestOnBorrow(dBProperty.getTestOnBorrow());
+        dataSource.setTestOnReturn(dBProperty.getTestOnReturn());
+        dataSource.setTimeBetweenEvictionRunsMillis(dBProperty.getTimeBetweenEvictionRunsMillis());
+        dataSource.setMinEvictableIdleTimeMillis(dBProperty.getMinEvictableIdleTimeMillis());
+        dataSource.setPoolPreparedStatements(dBProperty.getPoolPreparedStatements());
+        dataSource.setMaxPoolPreparedStatementPerConnectionSize(dBProperty.getMaxPoolPreparedStatementPerConnectionSize());
         return dataSource;
     }
 

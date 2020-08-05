@@ -1,4 +1,7 @@
-package com.heqing.demo.spring.hibernate.dao.base;
+package com.heqing.demo.spring.mongodb.dao;
+
+import com.heqing.demo.spring.mongodb.util.PageInfoUtil;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.io.Serializable;
 import java.util.List;
@@ -63,5 +66,35 @@ public interface BaseDao<T, PK extends Serializable> {
      * @return int 成功数量
      */
     int deleteBatch(List<PK> pkList);
+
+    /**
+     * 返回所有数据
+     * @return List<T> 列信息
+     */
+    List<T> list();
+
+    /**
+     * 根据条件返回数据
+     * @return List<T> 列信息
+     */
+    List<T> list(T t);
+
+    /**
+     * 获取总数
+     * @return 总数
+     */
+    long count();
+
+    /**
+     * 根据条件返回数量
+     * @return 总数
+     */
+    long count(T t);
+
+    /**
+     * 根据条件返回数据
+     * @return List<T> 列信息
+     */
+    PageInfoUtil<T> listByPage(T t, int pageNum, int pageSize);
 
 }

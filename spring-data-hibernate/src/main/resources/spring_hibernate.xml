@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	 <!-- 加载外部的properties配置文件 -->
-	<context:property-placeholder location="classpath:jdbc.properties"/>
+	<context:property-placeholder location="classpath:db.properties"/>
 
 	<!-- 配置数据库连接池（druid） 整合其他框架, 事务等 -->
 	<!-- 1. 数据源 : DriverManagerDataSource -->

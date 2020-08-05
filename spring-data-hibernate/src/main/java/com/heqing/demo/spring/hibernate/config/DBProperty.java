@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:jdbc.properties")
+@PropertySource("classpath:db.properties")
 @Data
-public class JDBCConfig {
+public class DBProperty {
 
     @Value("${jdbcUrl}")
     private String url;

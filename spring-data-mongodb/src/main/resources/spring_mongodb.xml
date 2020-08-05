@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	   xsi:schemaLocation=
+			   "http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 读取属性文件 -->
+	<context:property-placeholder location="classpath:db.properties" />
+
+	<!-- SpringData类型转换器 -->
+	<mongo:mapping-converter id="mongoConverter">
+		<mongo:custom-converters>
+			<mongo:converter>
+				<bean class="com.heqing.demo.spring.mongodb.converter.TimestampConverter" />
+			</mongo:converter>
+		</mongo:custom-converters>
+	</mongo:mapping-converter>
+
+	<!--
+        MongoDB配置部分
+        1.mongo：连接配置
+        2.db-factory：相当于sessionFactory
+        3.mongoTemplate：与数据库接口交互的主要实现类
+    -->
+	<!--定义用于访问 MongoDB 的 MongoClient 实例-->
+	<mongo:mongo-client id="mongoClient" host="${mongo.host}" port="${mongo.port}">
+		<mongo:client-options
+				threads-allowed-to-block-for-connection-multiplier="${mongo.threadsAllowedToBlockForConnectionMultiplier}"
+				connect-timeout="${mongo.connectTimeout}"
+				max-wait-time="${mongo.maxWaitTime}"
+				socket-keep-alive="${mongo.socketKeepAlive}"
+				socket-timeout="${mongo.socketTimeout}"
+		/>
+	</mongo:mongo-client>
+
+	<!--定义用于连接到数据库的连接工厂-->
+	<mongo:db-factory dbname="${mongo.dbname}" mongo-ref="mongoClient"/>
+
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+		<constructor-arg name="mongoConverter" ref="mongoConverter" />
+		<property name="writeConcern" value="SAFE" />
+	</bean>
+
+	<bean id="gridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+		<constructor-arg name="dbFactory" ref="mongoDbFactory" />
+		<constructor-arg name="converter" ref="mongoConverter" />
+	</bean>
+
+</beans>
