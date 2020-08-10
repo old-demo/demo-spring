@@ -11,7 +11,7 @@
           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- 读取属性文件 -->
-	<context:property-placeholder location="classpath:db.properties" />
+	<context:property-placeholder location="classpath:mongodb.properties" />
 
 	<!-- SpringData类型转换器 -->
 	<mongo:mapping-converter id="mongoConverter">

@@ -5,4 +5,6 @@ public interface EnvService {
     void placeholder();
 
     void spel();
+
+    void object();
 }

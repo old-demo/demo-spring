@@ -21,7 +21,7 @@ import java.util.List;
 public class SpringMongoDBConfig extends AbstractMongoConfiguration {
 
     @Autowired
-    DBProperty mongo;
+    MongoDBProperty mongo;
 
     @Override
     protected String getDatabaseName() {

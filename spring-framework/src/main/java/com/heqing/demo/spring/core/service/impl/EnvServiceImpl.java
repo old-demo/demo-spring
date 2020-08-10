@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.Set;
+
 @Service
 public class EnvServiceImpl implements EnvService {
 
@@ -24,6 +27,14 @@ public class EnvServiceImpl implements EnvService {
     @Value("${password}")
     private String password;
 
+    @Value("#{'${list}'.split(',')}")
+    private Set list;
+
+    @Value("#{${map}}")
+    private Map<String, Object> map;
+
+    private static String NAME;
+
     @Override
     public void placeholder() {
         System.out.println("--> index=" + envConfig.getProperty("index", Integer.class, 1)
@@ -38,5 +49,17 @@ public class EnvServiceImpl implements EnvService {
                 + ", env=" + env
                 + ", user=" + user
                 + ", password=" + password);
+    }
+
+    @Override
+    public void object() {
+        System.out.println("--> list=" + list
+                + ", map=" + map
+                + ", NAME=" + NAME);
+    }
+
+    @Value("${NAME}")
+    public void setName(String name) {
+        NAME = name;
     }
 }

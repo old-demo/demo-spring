@@ -23,5 +23,6 @@ public class TestEnv {
     public void testProfile() {
         envService.placeholder();
         envService.spel();
+        envService.object();
     }
 }
