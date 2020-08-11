@@ -28,6 +28,7 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
@@ -80,7 +81,9 @@ public class SpringLettuceConfig extends CachingConfigurerSupport {
     public LettuceConnectionFactory singleLettuceFactory(RedisProperty redisProperty) {
         // 单机redis配置
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(redisProperty.getHost(), redisProperty.getPort());
-//        configuration.setPassword(redisProperty.getPassword());
+        if(!StringUtils.isEmpty(redisProperty.getPassword())) {
+            configuration.setPassword(redisProperty.getPassword());
+        }
         LettuceConnectionFactory factory = new LettuceConnectionFactory(configuration);
         factory.setValidateConnection(true);
         return factory;

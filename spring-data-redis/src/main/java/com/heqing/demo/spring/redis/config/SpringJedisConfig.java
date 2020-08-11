@@ -5,7 +5,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
@@ -16,6 +15,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.util.StringUtils;
 
 @Configuration
 @ComponentScan("com.heqing.demo.spring.redis.*")
@@ -26,7 +26,9 @@ public class SpringJedisConfig {
     public JedisConnectionFactory singleJedisFactory(RedisProperty redisProperty) {
         // 单机redis配置
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(redisProperty.getHost(), redisProperty.getPort());
-//        configuration.setPassword(redisProperty.getPassword());
+        if(!StringUtils.isEmpty(redisProperty.getPassword())) {
+            configuration.setPassword(redisProperty.getPassword());
+        }
         JedisConnectionFactory factory = new JedisConnectionFactory(configuration);
         return factory;
     }

@@ -13,7 +13,7 @@ import java.util.Set;
 public class RedisProperty {
 
     @Value("${redis.pool.timeout}")
-    private Long timeout;
+    private int timeout;
 
     @Value("${redis.pool.maxTotal}")
     private int maxTotal;
