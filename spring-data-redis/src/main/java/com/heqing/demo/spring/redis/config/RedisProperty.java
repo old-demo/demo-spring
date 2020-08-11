@@ -1,4 +1,4 @@
-package com.heqing.demo.spring.redis.lettuce.config;
+package com.heqing.demo.spring.redis.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,15 +10,18 @@ import java.util.Set;
 @Data
 @Configuration
 @PropertySource(value = "classpath:redis.properties")
-public class LettuceProperty {
+public class RedisProperty {
 
-    @Value("${lettuce.pool.maxTotal}")
+    @Value("${redis.pool.timeout}")
+    private Long timeout;
+
+    @Value("${redis.pool.maxTotal}")
     private int maxTotal;
 
-    @Value("${lettuce.pool.maxIdle}")
+    @Value("${redis.pool.maxIdle}")
     private int maxIdle;
 
-    @Value("${lettuce.pool.minIdle}")
+    @Value("${redis.pool.minIdle}")
     private int minIdle;
 
     @Value("${redis.host}")
@@ -30,13 +33,13 @@ public class LettuceProperty {
     @Value("${redis.password}")
     private String password;
 
-    @Value("${lettuce.sentinel.master}")
+    @Value("${redis.sentinel.master}")
     private String master;
 
-    @Value("#{'${lettuce.sentinel.nodes}'.split(',')}")
+    @Value("#{'${redis.sentinel.nodes}'.split(',')}")
     private Set<String> sentinelNodes;
 
-    @Value("#{'${lettuce.cluster.nodes}'.split(',')}")
+    @Value("#{'${redis.cluster.nodes}'.split(',')}")
     private Set<String> clusterNodes;
 
 }

@@ -1,6 +1,5 @@
-package com.heqing.demo.spring.redis.lettuce.config;
+package com.heqing.demo.spring.redis.config;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +22,9 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -33,8 +35,8 @@ import java.time.Duration;
 import static java.util.Collections.singletonMap;
 
 @Configuration
-@EnableCaching // 开启缓存支持
 @ComponentScan("com.heqing.demo.spring.redis.*")
+@EnableCaching
 public class SpringLettuceConfig extends CachingConfigurerSupport {
 
     @Override
@@ -73,32 +75,32 @@ public class SpringLettuceConfig extends CachingConfigurerSupport {
         return cacheManager;
     }
 
-    @Bean
     @Profile("single")
-    public LettuceConnectionFactory singleLettuceFactory(LettuceProperty lettuceProperty) {
+    @Bean
+    public LettuceConnectionFactory singleLettuceFactory(RedisProperty redisProperty) {
         // 单机redis配置
-        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(lettuceProperty.getHost(), lettuceProperty.getPort());
-        configuration.setPassword(lettuceProperty.getPassword());
+        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(redisProperty.getHost(), redisProperty.getPort());
+//        configuration.setPassword(redisProperty.getPassword());
         LettuceConnectionFactory factory = new LettuceConnectionFactory(configuration);
         factory.setValidateConnection(true);
         return factory;
     }
 
-    @Bean
     @Profile("sentinel")
-    public LettuceConnectionFactory sentinelLettuceFactory(LettuceProperty lettuceProperty) {
+    @Bean
+    public LettuceConnectionFactory sentinelLettuceFactory(RedisProperty redisProperty) {
         // 哨兵模式redis配置
-        RedisSentinelConfiguration configuration = new RedisSentinelConfiguration(lettuceProperty.getMaster(), lettuceProperty.getSentinelNodes());
-        configuration.setPassword(lettuceProperty.getPassword());
+        RedisSentinelConfiguration configuration = new RedisSentinelConfiguration(redisProperty.getMaster(), redisProperty.getSentinelNodes());
+        configuration.setPassword(redisProperty.getPassword());
         LettuceConnectionFactory factory = new LettuceConnectionFactory(configuration);
         factory.setValidateConnection(true);
         return factory;
     }
 
-    @Bean
     @Profile("cluster")
-    public LettuceConnectionFactory lettuceConnectionFactory(LettuceProperty lettuceProperty) {
-
+    @Bean
+    public LettuceConnectionFactory clusterLettuceFactory(RedisProperty redisProperty) {
+        // 集群模式redis配置
         ClusterTopologyRefreshOptions clusterTopologyRefreshOptions = ClusterTopologyRefreshOptions.builder()
                 .enablePeriodicRefresh(Duration.ofSeconds(30))
                 .enableAllAdaptiveRefreshTriggers()
@@ -112,9 +114,9 @@ public class SpringLettuceConfig extends CachingConfigurerSupport {
                 .clientOptions(clusterClientOptions)
                 .build();
 
-        RedisClusterConfiguration serverConfig = new RedisClusterConfiguration(lettuceProperty.getClusterNodes());
+        RedisClusterConfiguration serverConfig = new RedisClusterConfiguration(redisProperty.getClusterNodes());
 
-        serverConfig.setPassword(lettuceProperty.getPassword());
+        serverConfig.setPassword(redisProperty.getPassword());
         // 通过配置RedisStandaloneConfiguration实例来
         //创建Redis Standolone模式的客户端连接创建工厂
         //配置hostname和port
@@ -123,8 +125,9 @@ public class SpringLettuceConfig extends CachingConfigurerSupport {
         return factory;
     }
 
+    @Profile("lettuce")
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
+    public RedisTemplate<String, Object> redisLettuceTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         // 设置序列化
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         // 对象映射
@@ -145,5 +148,14 @@ public class SpringLettuceConfig extends CachingConfigurerSupport {
         redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
+    }
+
+    @Profile("lettuce")
+    @Bean
+    public RedisMessageListenerContainer container(LettuceConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, new PatternTopic("test"));
+        return container;
     }
 }

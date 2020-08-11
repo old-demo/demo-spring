@@ -1,6 +1,6 @@
-package com.heqing.demo.spring.redis.lettuce.dao.impl;
+package com.heqing.demo.spring.redis.dao.impl;
 
-import com.heqing.demo.spring.redis.lettuce.dao.RedisLettuceDao;
+import com.heqing.demo.spring.redis.dao.RedisDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.DataType;
@@ -12,29 +12,29 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Repository
-public class RedisLettuceDaoImpl implements RedisLettuceDao {
+public class RedisDaoImpl implements RedisDao {
 
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public void set(String key, String value) {
-        redisTemplate.boundValueOps(key).set(value);
+        redisTemplate.opsForValue().set(key, value);
     }
 
     @Override
     public void set(String key, String value, long timeout, TimeUnit timeUnit) {
-        redisTemplate.boundValueOps(key).set(value, timeout, timeUnit);
+        redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
     }
 
     @Override
     public Object get(String key) {
-        return redisTemplate.boundValueOps(key).get();
+        return redisTemplate.opsForValue().get(key);
     }
 
     @Override
     public Object getSet(String key, String value) {
-        return redisTemplate.boundValueOps(key).getAndSet(value);
+        return redisTemplate.opsForValue().getAndSet(key, value);
     }
 
     @Override
@@ -98,125 +98,125 @@ public class RedisLettuceDaoImpl implements RedisLettuceDao {
 
     @Override
     public int append(String key, String value) {
-        return redisTemplate.boundValueOps(key).append(value);
+        return redisTemplate.opsForValue().append(key, value);
     }
 
     @Override
     public Long decrement(String key) {
-        return redisTemplate.boundValueOps(key).decrement();
+        return redisTemplate.opsForValue().decrement(key);
     }
 
     @Override
     public Long decrement(String key, long decrement) {
-        return redisTemplate.boundValueOps(key).decrement(decrement);
+        return redisTemplate.opsForValue().decrement(key, decrement);
     }
 
     @Override
     public Long increment(String key) {
-        return redisTemplate.boundValueOps(key).increment();
+        return redisTemplate.opsForValue().increment(key);
     }
 
     @Override
     public Long increment(String key, long increment) {
-        return redisTemplate.boundValueOps(key).increment(increment);
+        return redisTemplate.opsForValue().increment(key, increment);
     }
 
     @Override
     public Double increment(String key, double increment) {
-        return redisTemplate.boundValueOps(key).increment(increment);
+        return redisTemplate.opsForValue().increment(key, increment);
     }
 
     @Override
     public String range(String key, long startOffset, long endOffset) {
-        return redisTemplate.boundValueOps(key).get(startOffset, endOffset);
+        return redisTemplate.opsForValue().get(key, startOffset, endOffset);
     }
 
     @Override
     public Long lLeftPush(String key, Object value) {
-        return redisTemplate.boundListOps(key).leftPush(value);
+        return redisTemplate.opsForList().leftPush(key, value);
     }
 
     @Override
     public Long lLeftPushAll(String key, Object... values) {
-        return redisTemplate.boundListOps(key).leftPushAll(values);
+        return redisTemplate.opsForList().leftPushAll(key, values);
     }
 
     @Override
     public Long lRightPush(String key, Object value) {
-        return redisTemplate.boundListOps(key).rightPush(value);
+        return redisTemplate.opsForList().rightPush(key, value);
     }
 
     @Override
     public Long lRightPushAll(String key, Object... values) {
-        return redisTemplate.boundListOps(key).rightPushAll(values);
+        return redisTemplate.opsForList().rightPushAll(key, values);
     }
 
     @Override
     public Object lIndex(String key, long index) {
-        return redisTemplate.boundListOps(key).index(index);
+        return redisTemplate.opsForList().index(key, index);
     }
 
     @Override
     public Long lSize(String key) {
-        return redisTemplate.boundListOps(key).size();
+        return redisTemplate.opsForList().size(key);
     }
 
     @Override
     public Object lLeftPop(String key) {
-        return redisTemplate.boundListOps(key).leftPop();
+        return redisTemplate.opsForList().leftPop(key);
     }
 
     @Override
     public Object lLeftPop(String key, long timeout, TimeUnit unit) {
-        return redisTemplate.boundListOps(key).leftPop(timeout, unit);
+        return redisTemplate.opsForList().leftPop(key, timeout, unit);
     }
 
     @Override
     public Object lRightPop(String key) {
-        return redisTemplate.boundListOps(key).rightPop();
+        return redisTemplate.opsForList().rightPop(key);
     }
 
     @Override
     public Object lRightPop(String key, long timeout, TimeUnit unit) {
-        return redisTemplate.boundListOps(key).rightPop(timeout, unit);
+        return redisTemplate.opsForList().rightPop(key, timeout, unit);
     }
 
     @Override
     public List<Object> lRange(String key, long start, long end) {
-        return redisTemplate.boundListOps(key).range(start, end);
+        return redisTemplate.opsForList().range(key, start, end);
     }
 
     @Override
     public Long lRemove(String key, long count, Object value) {
-        return redisTemplate.boundListOps(key).remove(count, value);
+        return redisTemplate.opsForList().remove(key, count, value);
     }
 
     @Override
     public void lSet(String key, long index, Object value) {
         long size = lSize(key);
         if(index < size) {
-            redisTemplate.boundListOps(key).set(index, value);
+            redisTemplate.opsForList().set(key, index, value);
         }
     }
 
     @Override
     public void lTrim(String key, long start, long end) {
-        redisTemplate.boundListOps(key).trim(start, end);
+        redisTemplate.opsForList().trim(key, start, end);
     }
 
     @Override
     public Long sAdd(String key, Object... members) {
-        return redisTemplate.boundSetOps(key).add(members);
+        return redisTemplate.opsForSet().add(key, members);
     }
 
     @Override
     public Set<Object> sMembers(String key) {
-        return redisTemplate.boundSetOps(key).members();
+        return redisTemplate.opsForSet().members(key);
     }
 
     @Override
     public Boolean sIsMember(String key, Object member) {
-        return redisTemplate.boundSetOps(key).isMember(member);
+        return redisTemplate.opsForSet().isMember(key, member);
     }
 
     @Override
@@ -226,241 +226,261 @@ public class RedisLettuceDaoImpl implements RedisLettuceDao {
 
     @Override
     public Long sSize(String key) {
-        return redisTemplate.boundSetOps(key).size();
+        return redisTemplate.opsForSet().size(key);
     }
 
     @Override
     public Long sRemove(String key, Object... members) {
-        return redisTemplate.boundSetOps(key).remove(members);
+        return redisTemplate.opsForSet().remove(key, members);
     }
 
     @Override
     public Set<Object> sDiff(List<String> compares) {
-        return redisTemplate.boundSetOps(compares.get(0)).diff(compares.subList(1, compares.size()));
+        return redisTemplate.opsForSet().difference(compares.get(0), compares.subList(1, compares.size()));
     }
 
     @Override
     public void sDiffAndStore(List<String> compares, String destination) {
-        redisTemplate.boundSetOps(compares.get(0)).diffAndStore(compares.subList(1, compares.size()), destination);
+        redisTemplate.opsForSet().differenceAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
     }
 
     @Override
     public Set<Object> sIntersect(List<String> compares) {
-        return redisTemplate.boundSetOps(compares.get(0)).intersect(compares.subList(1, compares.size()));
+        return redisTemplate.opsForSet().intersect(compares.get(0), compares.subList(1, compares.size()));
     }
 
     @Override
     public void sIntersectAndStore(List<String> compares, String destination) {
-        redisTemplate.boundSetOps(compares.get(0)).intersectAndStore(compares.subList(1, compares.size()), destination);
+        redisTemplate.opsForSet().intersectAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
     }
 
     @Override
     public Object sPop(String key) {
-        return redisTemplate.boundSetOps(key).pop();
+        return redisTemplate.opsForSet().pop(key);
     }
 
     @Override
     public Object sRandember(String key) {
-        return redisTemplate.boundSetOps(key).randomMember();
+        return redisTemplate.opsForSet().randomMember(key);
     }
 
     @Override
     public Set<Object> sUnion(List<String> compares) {
-        return redisTemplate.boundSetOps(compares.get(0)).union(compares.subList(1, compares.size()));
+        return redisTemplate.opsForSet().union(compares.get(0), compares.subList(1, compares.size()));
     }
 
     @Override
     public void sUnionStore(List<String> compares, String destination) {
-        redisTemplate.boundSetOps(compares.get(0)).unionAndStore(compares.subList(1, compares.size()), destination);
+        redisTemplate.opsForSet().unionAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
     }
 
     @Override
     public Boolean zAdd(String key, Object member, double score) {
-        return redisTemplate.boundZSetOps(key).add(member, score);
+        return redisTemplate.opsForZSet().add(key, member, score);
     }
 
     @Override
     public Long zCard(String key) {
-        return redisTemplate.boundZSetOps(key).zCard();
+        return redisTemplate.opsForZSet().zCard(key);
     }
 
     @Override
     public Long zCount(String key, double min, double max) {
-        return redisTemplate.boundZSetOps(key).count(min, max);
+        return redisTemplate.opsForZSet().count(key, min, max);
     }
 
     @Override
     public Double zIncrby(String key, Object member, double score) {
-        return redisTemplate.boundZSetOps(key).incrementScore(member,score );
+        return redisTemplate.opsForZSet().incrementScore(key, member,score );
     }
 
     @Override
     public Set<Object> zRange(String key, long start, long end) {
-        return redisTemplate.boundZSetOps(key).range(start, end);
+        return redisTemplate.opsForZSet().range(key, start, end);
     }
 
     @Override
     public Set<Object> zRangeByScore(String key, double min, double max) {
-        return redisTemplate.boundZSetOps(key).rangeByScore(min, max);
+        return redisTemplate.opsForZSet().rangeByScore(key, min, max);
     }
 
     @Override
     public Long zRank(String key, Object member) {
-        return redisTemplate.boundZSetOps(key).rank(member);
+        return redisTemplate.opsForZSet().rank(key, member);
     }
 
     @Override
     public Long zRemove(String key, Object... members) {
-        return redisTemplate.boundZSetOps(key).remove(members);
+        return redisTemplate.opsForZSet().remove(key, members);
     }
 
     @Override
     public Long zRemoveRange(String key, long min, long max) {
-        return redisTemplate.boundZSetOps(key).removeRange(min, max);
+        return redisTemplate.opsForZSet().removeRange(key, min, max);
     }
 
     @Override
     public Long zRemoveRangeByScore(String key, double min, double max) {
-        return redisTemplate.boundZSetOps(key).removeRangeByScore(min, max);
+        return redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
     }
 
     @Override
     public Set<Object> zReverseRange(String key, long start, long end) {
-        return redisTemplate.boundZSetOps(key).reverseRange(start, end);
+        return redisTemplate.opsForZSet().reverseRange(key, start, end);
     }
 
     @Override
     public Set<Object> zRevrangeByScore(String key, double min, double max) {
-        return redisTemplate.boundZSetOps(key).reverseRangeByScore(min, max);
+        return redisTemplate.opsForZSet().reverseRangeByScore(key, min, max);
     }
 
     @Override
     public Long zReverseRank(String key, Object member) {
-        return redisTemplate.boundZSetOps(key).reverseRank(member);
+        return redisTemplate.opsForZSet().reverseRank(key, member);
     }
 
     @Override
     public Double zScore(String key, Object member) {
-        return redisTemplate.boundZSetOps(key).score(member);
+        return redisTemplate.opsForZSet().score(key, member);
     }
 
     @Override
     public Long zUunionAndStore(List<String> compares, String destination) {
-        return redisTemplate.boundZSetOps(compares.get(0)).unionAndStore(compares.subList(1, compares.size()), destination);
+        return redisTemplate.opsForZSet().unionAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
     }
 
     @Override
     public Long zIntersectAndStore(List<String> compares, String destination) {
-        return redisTemplate.boundZSetOps(compares.get(0)).intersectAndStore(compares.subList(1, compares.size()), destination);
+        return redisTemplate.opsForZSet().intersectAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
     }
 
     @Override
     public Long zLexCount(String key, double min, double max) {
-        return redisTemplate.boundZSetOps(key).count(min, max);
+        return redisTemplate.opsForZSet().count(key, min, max);
     }
 
     @Override
     public void hPutAll(String key, Map<String, Object> value) {
-        redisTemplate.boundHashOps(key).putAll(value);
+        redisTemplate.opsForHash().putAll(key, value);
     }
 
     @Override
     public void hPut(String key, Object field, Object value) {
-        redisTemplate.boundHashOps(key).put(field, value);
+        redisTemplate.opsForHash().put(key, field, value);
     }
 
     @Override
     public Long hDelete(String key, Object... member) {
-        return redisTemplate.boundHashOps(key).delete(member);
+        return redisTemplate.opsForHash().delete(key, member);
     }
 
     @Override
     public Boolean hasKey(String key, Object member) {
-        return redisTemplate.boundHashOps(key).hasKey(member);
+        return redisTemplate.opsForHash().hasKey(key, member);
     }
 
     @Override
     public Object hGet(String key, String member) {
-        return redisTemplate.boundHashOps(key).get(member);
+        return redisTemplate.opsForHash().get(key, member);
     }
 
     @Override
     public Map<Object, Object> hGet(String key) {
-        return redisTemplate.boundHashOps(key).entries();
+        return redisTemplate.opsForHash().entries(key);
     }
 
     @Override
     public Long hIncrement(String key, String field, long increment) {
-        return redisTemplate.boundHashOps(key).increment(field, increment);
+        return redisTemplate.opsForHash().increment(key, field, increment);
     }
 
     @Override
     public Double hIncrement(String key, String field, double increment) {
-        return redisTemplate.boundHashOps(key).increment(field, increment);
+        return redisTemplate.opsForHash().increment(key, field, increment);
     }
 
     @Override
     public Set<Object> hKeys(String key) {
-        return redisTemplate.boundHashOps(key).keys();
+        return redisTemplate.opsForHash().keys(key);
     }
 
     @Override
     public List<Object> hVals(String key) {
-        return redisTemplate.boundHashOps(key).values();
+        return redisTemplate.opsForHash().values(key);
     }
 
     @Override
     public Long hLen(String key) {
-        return redisTemplate.boundHashOps(key).size();
+        return redisTemplate.opsForHash().size(key);
     }
 
     @Override
     public List<Object> hMget(String key, List<Object> field) {
-        return redisTemplate.boundHashOps(key).multiGet(field);
+        return redisTemplate.opsForHash().multiGet(key, field);
     }
 
     @Override
     public Boolean hSetNx(String key, Object field, Object value) {
-        return redisTemplate.boundHashOps(key).putIfAbsent(field, value);
+        return redisTemplate.opsForHash().putIfAbsent(key, field, value);
     }
 
     @Override
     public Long geoAdd(String key, Point point, Object member) {
-        return redisTemplate.boundGeoOps(key).add(point, member);
+        return redisTemplate.opsForGeo().add(key, point, member);
     }
 
     @Override
     public Long geoAdd(String key, Map<Object, Point> memberCoordinateMap) {
-        return redisTemplate.boundGeoOps(key).add(memberCoordinateMap);
+        return redisTemplate.opsForGeo().add(key, memberCoordinateMap);
     }
 
     @Override
     public List<Point> geoPosition(String key, Object... members) {
-        return redisTemplate.boundGeoOps(key).position(members);
+        return redisTemplate.opsForGeo().position(key, members);
     }
 
     @Override
     public Distance geoDistance(String key, Object member1, Object member2, Metrics metric) {
-        return redisTemplate.boundGeoOps(key).distance(member1, member2, metric);
+        return redisTemplate.opsForGeo().distance(key, member1, member2, metric);
     }
 
     @Override
     public GeoResults<RedisGeoCommands.GeoLocation<Object>> geoRadius(String key, Object member, Distance distance, RedisGeoCommands.GeoRadiusCommandArgs args) {
-        return redisTemplate.boundGeoOps(key).radius(member, distance, args);
+        return redisTemplate.opsForGeo().radius(key, member, distance, args);
     }
 
     @Override
     public GeoResults<RedisGeoCommands.GeoLocation<Object>> geoRadius(String key, Circle circle, RedisGeoCommands.GeoRadiusCommandArgs args) {
-        return redisTemplate.boundGeoOps(key).radius(circle, args);
+        return redisTemplate.opsForGeo().radius(key, circle, args);
     }
 
     @Override
     public List<String> geohash(String key, Object... members) {
-        return redisTemplate.boundGeoOps(key).hash(members);
+        return redisTemplate.opsForGeo().hash(key, members);
     }
 
     @Override
     public Long geoRemove(String key, Object... members) {
-        return redisTemplate.boundGeoOps(key).remove(members);
+        return redisTemplate.opsForGeo().remove(key, members);
+    }
+
+    @Override
+    public Long logAdd(String key, Object... elements) {
+        return redisTemplate.opsForHyperLogLog().add(key, elements);
+    }
+
+    @Override
+    public Long logSize(String... keys) {
+        return redisTemplate.opsForHyperLogLog().size(keys);
+    }
+
+    @Override
+    public Long logUnion(String destkey, String... sourcekeys) {
+        return redisTemplate.opsForHyperLogLog().union(destkey, sourcekeys);
+    }
+
+    @Override
+    public void logDelete(String key) {
+        redisTemplate.opsForHyperLogLog().delete(key);
     }
 }

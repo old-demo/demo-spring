@@ -5,8 +5,10 @@ plugins {
 dependencies {
     compile group: 'org.springframework', name: 'spring-context', version: spring_version
     compile group: 'org.springframework.data', name: 'spring-data-redis', version: '2.1.18.RELEASE'
-    // redis 高级客户端
+    // lettuce 客户端
     compile  group: 'io.lettuce', name: 'lettuce-core', version: '5.1.8.RELEASE'
+    // jedis 客户端
+    compile group: 'redis.clients', name: 'jedis', version: '2.9.3'
     // spring-data-redis 依赖的包
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
     compile group: 'org.msgpack', name: 'jackson-dataformat-msgpack', version: '0.8.20'
