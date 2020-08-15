@@ -1,4 +1,4 @@
-package com.geqing.demo.spring.redis;
+package com.heqing.demo.spring.redis;
 
 import com.heqing.demo.spring.redis.config.SpringJedisConfig;
 import com.heqing.demo.spring.redis.config.SpringLettuceConfig;
@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(
         classes = {SpringLettuceConfig.class, SpringJedisConfig.class}
 )
-@ActiveProfiles({"jedis","single"})
+@ActiveProfiles({"lettuce","sentinel"})
 public class RedisMsgTest {
 
     @Autowired

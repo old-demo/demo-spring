@@ -1,4 +1,4 @@
-package com.geqing.demo.spring.redis;
+package com.heqing.demo.spring.redis;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heqing.demo.spring.redis.config.SpringJedisConfig;
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
   *  第一个参数指定 客户端    jedis / lettuce
  *   第二个参数指定 连接模式  single(单例) / sentinel(哨兵) / cluster(集群)
   */
-@ActiveProfiles({"jedis","single"})
+@ActiveProfiles({"lettuce","single"})
 public class RedisTest {
 
     @Autowired

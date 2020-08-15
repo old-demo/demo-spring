@@ -20,6 +20,7 @@ public class ListenerTest {
     @Test
     public void testListener() {
         applicationEventPublisher.publishEvent(new MyEvent(this, "写作业"));
+        System.out.println("-----");
     }
 
 }

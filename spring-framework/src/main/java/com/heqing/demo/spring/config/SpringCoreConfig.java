@@ -1,9 +1,11 @@
 package com.heqing.demo.spring.config;
 
 import org.springframework.context.annotation.*;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
 @EnableAspectJAutoProxy     // 启动AspectJ自动代理
+@EnableAsync
 @ComponentScan("com.heqing.demo.spring.*")    // 启动自动扫描bean
 public class SpringCoreConfig {
 
