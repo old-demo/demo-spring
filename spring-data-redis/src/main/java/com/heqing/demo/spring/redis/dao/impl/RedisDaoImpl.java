@@ -18,12 +18,12 @@ public class RedisDaoImpl implements RedisDao {
     RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public void set(String key, String value) {
+    public void set(String key, Object value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
     @Override
-    public void set(String key, String value, long timeout, TimeUnit timeUnit) {
+    public void set(String key, Object value, long timeout, TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
     }
 
@@ -33,7 +33,7 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public Object getSet(String key, String value) {
+    public Object getSet(String key, Object value) {
         return redisTemplate.opsForValue().getAndSet(key, value);
     }
 
@@ -235,23 +235,23 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public Set<Object> sDiff(List<String> compares) {
-        return redisTemplate.opsForSet().difference(compares.get(0), compares.subList(1, compares.size()));
+    public Set<Object> sDiff(String key, List<String> compares) {
+        return redisTemplate.opsForSet().difference(key, compares);
     }
 
     @Override
-    public void sDiffAndStore(List<String> compares, String destination) {
-        redisTemplate.opsForSet().differenceAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
+    public void sDiffAndStore(String key, List<String> compares, String destination) {
+        redisTemplate.opsForSet().differenceAndStore(key, compares, destination);
     }
 
     @Override
-    public Set<Object> sIntersect(List<String> compares) {
-        return redisTemplate.opsForSet().intersect(compares.get(0), compares.subList(1, compares.size()));
+    public Set<Object> sIntersect(String key, List<String> compares) {
+        return redisTemplate.opsForSet().intersect(key, compares);
     }
 
     @Override
-    public void sIntersectAndStore(List<String> compares, String destination) {
-        redisTemplate.opsForSet().intersectAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
+    public void sIntersectAndStore(String key, List<String> compares, String destination) {
+        redisTemplate.opsForSet().intersectAndStore(key, compares, destination);
     }
 
     @Override
@@ -265,13 +265,13 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public Set<Object> sUnion(List<String> compares) {
-        return redisTemplate.opsForSet().union(compares.get(0), compares.subList(1, compares.size()));
+    public Set<Object> sUnion(String key, List<String> compares) {
+        return redisTemplate.opsForSet().union(key, compares);
     }
 
     @Override
-    public void sUnionStore(List<String> compares, String destination) {
-        redisTemplate.opsForSet().unionAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
+    public void sUnionStore(String key, List<String> compares, String destination) {
+        redisTemplate.opsForSet().unionAndStore(key, compares, destination);
     }
 
     @Override
@@ -345,13 +345,13 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public Long zUunionAndStore(List<String> compares, String destination) {
-        return redisTemplate.opsForZSet().unionAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
+    public Long zUnionAndStore(String key, List<String> compares, String destination) {
+        return redisTemplate.opsForZSet().unionAndStore(key, compares, destination);
     }
 
     @Override
-    public Long zIntersectAndStore(List<String> compares, String destination) {
-        return redisTemplate.opsForZSet().intersectAndStore(compares.get(0), compares.subList(1, compares.size()), destination);
+    public Long zIntersectAndStore(String key, List<String> compares, String destination) {
+        return redisTemplate.opsForZSet().intersectAndStore(key, compares, destination);
     }
 
     @Override

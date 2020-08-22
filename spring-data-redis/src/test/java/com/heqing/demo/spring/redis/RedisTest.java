@@ -258,32 +258,32 @@ public class RedisTest {
 
     @Test
     public void testsDiff() {
-        List<String> list = Arrays.asList("testSet0", "testSet1");
-        Set<Object> set = redisDao.sDiff( list);
+        List<String> list = Arrays.asList("testSet1");
+        Set<Object> set = redisDao.sDiff("testSet0", list);
         System.out.println("-->"+ JSONObject.toJSONString(set));
 
-        list = Arrays.asList( "testSet0", "testSet1");
-        redisDao.sDiffAndStore(list, "testSetStore1");
+        list = Arrays.asList( "testSet1");
+        redisDao.sDiffAndStore("testSet0", list, "testSetStore1");
     }
 
     @Test
     public void testsIntersect() {
-        List<String> list = Arrays.asList("testSet", "testSet0", "testSet1");
-        Set<Object> set = redisDao.sIntersect(list);
+        List<String> list = Arrays.asList("testSet0", "testSet1");
+        Set<Object> set = redisDao.sIntersect("testSet", list);
         System.out.println("-->"+ JSONObject.toJSONString(set));
 
-        list = Arrays.asList("testSet", "testSet1", "testSet0");
-        redisDao.sIntersectAndStore(list, "testSetStore2");
+        list = Arrays.asList("testSet1", "testSet0");
+        redisDao.sIntersectAndStore("testSet", list, "testSetStore2");
     }
 
     @Test
     public void testsUnion() {
-        List<String> list = Arrays.asList("testSet", "testSet0", "testSet1");
-        Set<Object> set = redisDao.sUnion(list);
+        List<String> list = Arrays.asList("testSet0", "testSet1");
+        Set<Object> set = redisDao.sUnion("testSet", list);
         System.out.println("-->"+ JSONObject.toJSONString(set));
 
-        list = Arrays.asList("testSet", "testSet1", "testSet0");
-        redisDao.sUnionStore(list, "testSetStore3");
+        list = Arrays.asList("testSet1", "testSet0");
+        redisDao.sUnionStore("testSet", list, "testSetStore3");
     }
 
     @Test
@@ -399,14 +399,14 @@ public class RedisTest {
     @Test
     public void testzUunionAndStore() {
         List<String> keys = Arrays.asList("testSortedSet", "testSortedSet1");
-        Long set = redisDao.zUunionAndStore(keys, "zUunionAndStore");
+        Long set = redisDao.zUnionAndStore("testSortedSet", keys, "zUunionAndStore");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzIntersectAndStore() {
-        List<String> keys = Arrays.asList("testSortedSet", "testSortedSet1");
-        Long set = redisDao.zIntersectAndStore(keys, "zIntersectAndStore");
+        List<String> keys = Arrays.asList("testSortedSet1");
+        Long set = redisDao.zIntersectAndStore("testSortedSet", keys, "zIntersectAndStore");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 

@@ -23,6 +23,7 @@ public class RedisMsgTest {
     @Test
     public void sendMsg() {
         redisTemplate.convertAndSend("test", "heqing");
+        System.out.println("----------------");
     }
 
 }
