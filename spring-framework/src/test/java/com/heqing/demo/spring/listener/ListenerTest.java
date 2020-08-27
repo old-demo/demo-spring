@@ -21,6 +21,12 @@ public class ListenerTest {
     public void testListener() {
         applicationEventPublisher.publishEvent(new MyEvent(this, "写作业"));
         System.out.println("-----");
+
+        try {
+            Thread.sleep(10000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

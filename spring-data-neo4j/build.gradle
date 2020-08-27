@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: spring_version
+    compile group: 'org.springframework.data', name: 'spring-data-neo4j', version: '5.2.0.RELEASE'
+    
+    compile group: 'org.neo4j', name: 'neo4j-ogm-http-driver', version: '3.2.1'
+    
+    // 日志框架
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: log4j_version
+    // 阿里Json框架
+    compile group: 'com.alibaba', name: 'fastjson', version: fastjson_version
+    // 构造器注解
+    compile group: 'org.projectlombok', name: 'lombok', version: lombok_version
+
+    // 测试框架
+    testCompile group: 'junit', name: 'junit', version: junit_version
+    testCompile group: 'org.springframework', name: 'spring-test', version: spring_version
+}

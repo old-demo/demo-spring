@@ -1,15 +1,13 @@
-package com.heqing.demo.spring.mongodb.dao.impl;
+package com.heqing.demo.spring.mongodb.repository.impl;
 
-import com.heqing.demo.spring.mongodb.dao.FileDao;
+import com.heqing.demo.spring.mongodb.repository.FileRepository;
 import com.heqing.demo.spring.mongodb.model.MongoFile;
 import com.mongodb.client.gridfs.GridFSBucket;
-import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.GridFSFindIterable;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
@@ -23,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Repository
-public class FileDaoImpl implements FileDao {
+public class FileRepositoryImpl implements FileRepository {
 
     private static Pattern NUMBER_PATTERN = Pattern.compile("(?<==).*(?=})");
 

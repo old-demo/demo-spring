@@ -1,7 +1,6 @@
-package com.heqing.demo.spring.mongodb.dao;
+package com.heqing.demo.spring.mongodb.repository;
 
 import com.heqing.demo.spring.mongodb.util.PageInfoUtil;
-import org.springframework.data.mongodb.core.query.Query;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
 /**
  * 数据访问基础类
  */
-public interface BaseDao<T, PK extends Serializable> {
+public interface BaseRepository<T, PK extends Serializable> {
 
     /**
      * 增加

@@ -1,11 +1,11 @@
-package com.heqing.demo.spring.mongodb.dao;
+package com.heqing.demo.spring.mongodb.repository;
 
 import com.heqing.demo.spring.mongodb.model.MongoFile;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
 
-public interface FileDao {
+public interface FileRepository {
 
     /**
      * 上传文件到mongodb

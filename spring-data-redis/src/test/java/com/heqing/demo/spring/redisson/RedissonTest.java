@@ -2,7 +2,7 @@ package com.heqing.demo.spring.redisson;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heqing.demo.spring.redisson.config.SpringRedissonConfig;
-import com.heqing.demo.spring.redisson.dao.RedissonDao;
+import com.heqing.demo.spring.redisson.repository.RedissonRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.api.*;
@@ -18,11 +18,11 @@ import java.util.concurrent.TimeUnit;
 @ContextConfiguration(
         classes = SpringRedissonConfig.class
 )
-@ActiveProfiles("cluster")
+@ActiveProfiles("single")
 public class RedissonTest {
 
     @Autowired
-    RedissonDao redissonDao;
+    RedissonRepository redissonDao;
 
     @Test
     public void test() {

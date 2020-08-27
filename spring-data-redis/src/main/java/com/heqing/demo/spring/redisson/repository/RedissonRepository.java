@@ -1,19 +1,11 @@
-package com.heqing.demo.spring.redis.dao;
+package com.heqing.demo.spring.redisson.repository;
 
-import org.springframework.data.geo.*;
-import org.springframework.data.redis.connection.DataType;
-import org.springframework.data.redis.connection.RedisGeoCommands;
+import org.redisson.api.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 参考文件 https://blog.csdn.net/weixin_40192296/article/details/101064347
- */
-public interface RedisDao {
+public interface RedissonRepository {
 
     /**
      * 将字符串值 value 关联到 key
@@ -139,16 +131,15 @@ public interface RedisDao {
      * @param key 旧主键名
      * @return 数据类型
      */
-    DataType type(String key);
+    RType type(String key);
 
     /**
      * 如果 key 已经存在并且是一个字符串， APPEND 命令将 value 追加到 key 原来的值的末尾。<br/>
      * 如果 key 不存在， APPEND 就简单地将给定 key 设为 value ，就像执行 SET key value 一样。
      * @param key 主键名
      * @param value 值
-     * @return 追加 value 之后， key 中字符串的长度。
      */
-    int append(String key, String value);
+    void append(String key, String value);
 
     /**
      * 将 key 中储存的数字值减一。<br/>
@@ -159,16 +150,6 @@ public interface RedisDao {
      * @return 执行 DECR 命令之后 key 的值。
      */
     Long decrement(String key);
-
-    /**
-     * 将 key 所储存的值减去减量 decrement 。<br/>
-     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECRBY 操作。<br/>
-     * 如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。<br/>
-     * @param key 主键
-     * @param decrement 减量
-     * @return 减去 decrement 之后， key 的值。
-     */
-    Long decrement(String key, long decrement);
 
     /**
      * 将 key 中储存的数字值增一。<br/>
@@ -205,22 +186,12 @@ public interface RedisDao {
     Double increment(String key, double increment);
 
     /**
-     * 返回 key 中字符串值的子字符串，字符串的截取范围由 start 和 end 两个偏移量决定(包括 start 和 end 在内)。
-     * 负数偏移量表示从字符串最后开始计数， -1 表示最后一个字符， -2 表示倒数第二个，以此类推。<br/>
-     * @param key 主键
-     * @param startOffset 开始坐标
-     * @param endOffset 结束坐标
-     * @return 截取得出的子字符串。
-     */
-    String range(String key, long startOffset, long endOffset);
-
-    /**
      * 将一个 插入到列表 key 的表头。<br/>
      * @param key 主键
      * @param value 一个
      * @return 列表的长度。
      */
-    Long lLeftPush(String key, Object value);
+    void lLeftPush(String key, Object value);
 
     /**
      * 将值 value 插入到列表 key 的表头，当且仅当 key 存在并且是一个列表。<br/>
@@ -228,7 +199,7 @@ public interface RedisDao {
      * @param values 一个或多个值
      * @return 列表的长度。
      */
-    Long lLeftPushAll(String key, Object... values);
+    void lLeftPushAll(String key, List<Object> values);
 
     /**
      * 将一个或多个值 value 插入到列表 key 的表尾(最右边)。<br/>
@@ -236,7 +207,7 @@ public interface RedisDao {
      * @param value 一个
      * @return 列表的长度。
      */
-    Long lRightPush(String key, Object value);
+    void lRightPush(String key, Object value);
 
     /**
      * 将值 value 插入到列表 key 的表尾，当且仅当 key 存在并且是一个列表。<br/>
@@ -244,7 +215,7 @@ public interface RedisDao {
      * @param values 一个或多个值
      * @return 列表的长度。
      */
-    Long lRightPushAll(String key, Object... values);
+    void lRightPushAll(String key, List<Object> values);
 
     /**
      * 返回列表 key 中，下标为 index 的元素。<br/>
@@ -255,7 +226,7 @@ public interface RedisDao {
      * @return 列表中下标为 index 的元素。<br/>
      *         如果 index 参数的值不在列表的区间范围内(out of range)，返回 nil 。
      */
-    Object lIndex(String key, long index);
+    Object lIndex(String key, int index);
 
     /**
      * 获取存储在绑定键处的列表大小
@@ -264,7 +235,7 @@ public interface RedisDao {
      * @param key 主键
      * @return 列表 key 的长度。
      */
-    Long lSize(String key);
+    int lSize(String key);
 
     /**
      * 删除并返回存储在绑定键处的列表中的第一个元素
@@ -307,15 +278,11 @@ public interface RedisDao {
     Object lRightPop(String key, long timeout, TimeUnit unit);
 
     /**
-     * 返回列表 key 中指定区间内的元素，区间以偏移量 start 和 stop 指定。<br/>
-     * 下标(index)参数 start 和 stop 都以 0 为底，也就是说，以 0 表示列表的第一个元素，以 1 表示列表的第二个元素，以此类推。<br/>
-     * 你也可以使用负数下标，以 -1 表示列表的最后一个元素， -2 表示列表的倒数第二个元素，以此类推。
+     * 返回列表 key 中指定区间内的元素。<br/>
      * @param key 主键
-     * @param start 开始下标
-     * @param end 结束下标
      * @return 包含指定区间内的元素的列表。
      */
-    List<Object> lRange(String key, long start, long end);
+    List<Object> lRange(String key);
 
     /**
      * 根据参数 count 的值，移除列表中与参数 value 相等的元素。<br/>
@@ -330,7 +297,7 @@ public interface RedisDao {
      * @param value 值
      * @return 被移除元素的数量。因为不存在的 key 被视作空表(empty list)，所以当 key 不存在时， LREM 命令总是返回 0 。
      */
-    Long lRemove(String key, long count, Object value);
+    Boolean lRemove(String key, int count, Object value);
 
     /**
      * 将列表 key 下标为 index 的元素的值设置为 value 。<br/>
@@ -339,7 +306,7 @@ public interface RedisDao {
      * @param value 值
      * @return 被移除元素的数量。因为不存在的 key 被视作空表(empty list)，所以当 key 不存在时， LREM 命令总是返回 0 。
      */
-    void lSet(String key, long index, Object value);
+    void lSet(String key, int index, Object value);
 
     /**
      * 对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除。<br/>
@@ -351,7 +318,7 @@ public interface RedisDao {
      * @param end 结束下标
      * @return 成功返回true，失败返回false;
      */
-    void lTrim(String key, long start, long end);
+    void lTrim(String key, int start, int end);
 
     /**
      * 将一个或多个 member 元素加入到集合 key 当中，已经存在于集合的 member 元素将被忽略。<br/>
@@ -360,7 +327,7 @@ public interface RedisDao {
      * @param members 需要添加的元素
      * @return 被添加到集合中的新元素的数量，不包括被忽略的元素。
      */
-    Long sAdd(String key, Object... members);
+    Boolean sAdd(String key, List<Object> members);
 
     /**
      * 返回集合 key 中的所有成员。 不存在的 key 被视为空集合。
@@ -395,7 +362,7 @@ public interface RedisDao {
      * @param key 主键名
      * @return 集合的基数。当 key 不存在时，返回 0 。
      */
-    Long sSize(String key);
+    int sSize(String key);
 
     /**
      * 移除集合 key 中的一个或多个 member 元素，不存在的 member 元素会被忽略。<br/>
@@ -404,7 +371,7 @@ public interface RedisDao {
      * @param members 元素名
      * @return 被成功移除的元素的数量，不包括被忽略的元素。
      */
-    Long sRemove(String key, Object... members);
+    Boolean sRemove(String key, List<Object> members);
 
     /**
      * 返回一个集合的全部成员，该集合是所有给定集合之间的差集。<br/>
@@ -413,36 +380,17 @@ public interface RedisDao {
      * @param compares 多个主键名
      * @return 一个包含差集成员的列表。
      */
-    Set<Object> sDiff(String key, List<String> compares);
-
-    /**
-     * 这个命令的作用和 SDIFF 类似，但它将结果保存到 destination 集合，而不是简单地返回结果集。<br/>
-     * destination 可以是 key 本身。如果 destination 集合已经存在，则将其覆盖。
-     * @param key 主键名
-     * @param compares 多个主键名
-     * @param destination 保存的key
-     * @return 结果集中的元素数量。
-     */
-    void sDiffAndStore(String key, List<String> compares, String destination);
+    Set<Object> sDiff(String key, String... compares);
 
     /**
      * 返回一个集合的全部成员，该集合是所有给定集合的交集。<br/>
      * 不存在的 key 被视为空集。<br/>
      * 当给定集合当中有一个空集时，结果也为空集(根据集合运算定律)。
+     * @param key 主键名
      * @param compares 比较的key
      * @return 交集成员的列表。
      */
-    Set<Object> sIntersect(String key, List<String> compares);
-
-    /**
-     * 这个命令类似于 SINTER 命令，但它将结果保存到 destination 集合，而不是简单地返回结果集。<br/>
-     * 如果 destination 集合已经存在，则将其覆盖。<br/>
-     * destination 可以是 key 本身。
-     * @param compares 比较的key
-     * @param destination 保存的key
-     * @return 结果集中的元素数量。
-     */
-    void sIntersectAndStore(String key, List<String> compares, String destination);
+    Set<Object> sIntersect(String key, String... compares);
 
     /**
      * 返回一个集合的全部成员，该集合是所有给定集合的并集。<br/>
@@ -450,17 +398,7 @@ public interface RedisDao {
      * @param compares 多个主键名
      * @return 并集成员的列表。
      */
-    Set<Object> sUnion(String key, List<String> compares);
-
-    /**
-     * 这个命令类似于 SUNION 命令，但它将结果保存到 destination 集合，而不是简单地返回结果集。<br/>
-     * destination 可以是 key 本身。如果 destination 已经存在，则将其覆盖。
-     * @param compares 多个主键名
-     * @param destination 保存的key
-     * @return 结果集中的元素数量。
-     */
-    void sUnionStore(String key, List<String> compares, String destination);
-
+    Set<Object> sUnion(String key, String... compares);
 
     /**
      * 移除并返回集合中的一个随机元素。<br/>
@@ -496,7 +434,7 @@ public interface RedisDao {
      * @param key 主键
      * @return 当 key 存在且是有序集类型时，返回有序集的基数。当 key 不存在时，返回 0 。
      */
-    Long zCard(String key);
+    int zCard(String key);
 
     /**
      * 返回有序集 key 中， score 值在 min 和 max 之间(默认包括 score 值等于 min 或 max )的成员的数量。
@@ -505,7 +443,7 @@ public interface RedisDao {
      * @param max 最大分数
      * @return score 值在 min 和 max 之间的成员的数量。
      */
-    Long zCount(String key, double min, double max);
+    int zCount(String key, double min, double max);
 
     /**
      * 为有序集 key 的成员 member 的 score 值加上增量 increment 。<br/>
@@ -532,7 +470,7 @@ public interface RedisDao {
      * @param end 结束下标
      * @return 指定区间内，带有 score 值(可选)的有序集成员的列表。
      */
-    Set<Object> zRange(String key, long start, long end);
+    ArrayList<Object> zRange(String key, int start, int end);
 
     /**
      * 返回有序集 key 中，所有 score 值介于 min 和 max 之间(包括等于 min 或 max )的成员。有序集成员按 score 值递增(从小到大)次序排列。<br/>
@@ -542,7 +480,7 @@ public interface RedisDao {
      * @param max 最大分数
      * @return 指定区间内，带有 score 值(可选)的有序集成员的列表。
      */
-    Set<Object> zRangeByScore(String key, double min, double max);
+    ArrayList<Object> zRangeByScore(String key, double min, double max);
 
     /**
      * 返回有序集 key 中成员 member 的排名。其中有序集成员按 score 值递增(从小到大)顺序排列。<br/>
@@ -553,7 +491,7 @@ public interface RedisDao {
      * @return 如果 member 是有序集 key 的成员，返回 member 的排名。<br/>
      *         如果 member 不是有序集 key 的成员，返回 nil 。
      */
-    Long zRank(String key, Object member);
+    Integer zRank(String key, Object member);
 
     /**
      * 移除有序集 key 中的一个或多个成员，不存在的成员将被忽略。<br/>
@@ -562,7 +500,7 @@ public interface RedisDao {
      * @param members 多个成员
      * @return 被成功移除的成员的数量，不包括被忽略的成员。
      */
-    Long zRemove(String key, Object... members);
+    Boolean zRemove(String key, List<Object> members);
 
     /**
      * 移除有序集 key 中，指定排名(rank)区间内的所有成员。<br/>
@@ -574,7 +512,7 @@ public interface RedisDao {
      * @param end 结束下标
      * @return 被成功移除的成员的数量。
      */
-    Long zRemoveRange(String key, long start, long end);
+    int zRemoveRange(String key, int start, int end);
 
     /**
      * 移除有序集 key 中，所有 score 值介于 min 和 max 之间(包括等于 min 或 max )的成员。<br/>
@@ -583,7 +521,7 @@ public interface RedisDao {
      * @param end 结束分数值
      * @return 被成功移除的成员的数量。
      */
-    Long zRemoveRangeByScore(String key, double start, double end);
+    int zRemoveRangeByScore(String key, double start, double end);
 
     /**
      * 返回有序集 key 中，指定区间内的成员。<br/>
@@ -594,18 +532,18 @@ public interface RedisDao {
      * @param end 结束分数值
      * @return 指定区间内，带有 score 值(可选)的有序集成员的列表。
      */
-    Set<Object> zReverseRange(String key, long start, long end);
+    ArrayList<Object> zReverseRange(String key, int start, int end);
 
     /**
      * 返回有序集 key 中， score 值介于 max 和 min 之间(默认包括等于 max 或 min )的所有的成员。有序集成员按 score 值递减(从大到小)的次序排列。<br/>
      * 具有相同 score 值的成员按字典序的逆序(reverse lexicographical order )排列。<br/>
      * 除了成员按 score 值递减的次序排列这一点外， ZREVRANGEBYSCORE 命令的其他方面和 ZRANGEBYSCORE 命令一样。
      * @param key 主键
-     * @param max 最大分数值
      * @param min 最小分数值
+     * @param max 最大分数值
      * @return 指定区间内，带有 score 值(可选)的有序集成员的列表。
      */
-    Set<Object> zRevrangeByScore(String key, double min, double max);
+    LinkedHashSet<Object> zRevrangeByScore(String key, double min, double max);
 
     /**
      * 返回有序集 key 中成员 member 的排名。其中有序集成员按 score 值递减(从大到小)排序。<br/>
@@ -615,7 +553,7 @@ public interface RedisDao {
      * @return 如果 member 是有序集 key 的成员，返回 member 的排名。
      *         如果 member 不是有序集 key 的成员，返回 nil 。
      */
-    Long zReverseRank(String key, Object member);
+    Integer zReverseRank(String key, Object member);
 
     /**
      * 返回有序集 key 中，成员 member 的 score 值。<br/>
@@ -629,30 +567,20 @@ public interface RedisDao {
     /**
      * 计算给定的一个或多个有序集的并集，并将该并集(结果集)储存到 destination
      * 默认情况下，结果集中某个成员的 score 值是所有给定集下该成员 score 值之 和 。
+     * @param key 主键
      * @param compares 一个或多个有序集
-     * @param destination 目标集合
      * @returnmember 保存到 dstkey 的结果集的基数。
      */
-    Long zUnionAndStore(String key, List<String> compares, String destination);
+    int zUnion(String key, String... compares);
 
     /**
      * 计算给定的一个或多个有序集的交集，并将该交集(结果集)储存到 destination 。<br/>
      * 默认情况下，结果集中某个成员的 score 值是所有给定集下该成员 score 值之和。
      * @param compares 一个或多个有序集
-     * @param destination 目标集合
+     * @param key 主键
      * @returnmember 保存到 dstkey 的结果集的基数。
      */
-    Long zIntersectAndStore(String key, List<String> compares, String destination);
-
-    /**
-     * 对于一个所有成员的分值都相同的有序集合键 key 来说， 这个命令会返回该集合中， 成员介于 min 和 max 范围内的元素数量。<br/>
-     * 这个命令的 min 参数和 max 参数的意义和 ZRANGEBYLEX 命令的 min 参数和 max 参数的意义一样。
-     * @param key 主键
-     * @param min 成员名
-     * @param max 成员名
-     * @return 指定范围内的元素数量。
-     */
-    Long zLexCount(String key, double min, double max);
+    int zIntersectAndStore(String key, String... compares);
 
     /**
      * 将哈希表 hash 中设置为 value 。<br/>
@@ -706,20 +634,6 @@ public interface RedisDao {
     Map<Object, Object> hGet(String key);
 
     /**
-     * 为哈希表 key 中的域 field 的值加上增量 increment 。<br/>
-     * 增量也可以为负数，相当于对给定域进行减法操作。<br/>
-     * 如果 key 不存在，一个新的哈希表被创建并执行 HINCRBY 命令。<br/>
-     * 如果域 field 不存在，那么在执行命令前，域的值被初始化为 0 。<br/>
-     * 对一个储存字符串值的域 field 执行 HINCRBY 命令将造成一个错误。<br/>
-     * 本操作的值被限制在 64 位(bit)有符号数字表示之内。
-     * @param key 主键名
-     * @param field 域名
-     * @param increment 增量
-     * @return 执行 HINCRBY 命令之后，哈希表 key 中域 field 的值。
-     */
-    Long hIncrement(String key, String field, long increment);
-
-    /**
      * 为哈希表 key 中的域 field 加上浮点数增量 increment 。<br/>
      * 如果哈希表中没有域 field ，那么 HINCRBYFLOAT 会先将域 field 的值设为 0 ，然后再执行加法操作。<br/>
      * 如果键 key 不存在，那么 HINCRBYFLOAT 会先创建一个哈希表，再创建域 field ，最后再执行加法操作。<br/>
@@ -733,7 +647,7 @@ public interface RedisDao {
      * @param increment 增量
      * @return 执行 HINCRBY 命令之后，哈希表 key 中域 field 的值。
      */
-    Double hIncrement(String key, String field, double increment);
+    Object hIncrement(String key, String field, Number increment);
 
     /**
      * 返回哈希表 key 中的所有域。
@@ -754,7 +668,7 @@ public interface RedisDao {
      * @param key 主键名
      * @return 哈希表中域的数量。当 key 不存在时，返回 0 。
      */
-    Long hLen(String key);
+    int hLen(String key);
 
     /**
      * 返回哈希表 key 中，一个或多个给定域的值。<br/>
@@ -764,7 +678,7 @@ public interface RedisDao {
      * @param field 多个域名
      * @return 一个包含多个给定域的关联值的表，表值的排列顺序和给定域参数的请求顺序一样。
      */
-    List<Object> hMget(String key, List<Object> field);
+    Map<Object, Object> hMget(String key, Set<Object> field);
 
     /**
      * 将哈希表 key 中的域 field 的值设置为 value ，当且仅当域 field 不存在。<br/>
@@ -789,11 +703,10 @@ public interface RedisDao {
      * </ul>
      * 当用户尝试输入一个超出范围的经度或者纬度时， GEOADD 命令将返回一个错误。
      * @param key 主键名
-     * @param point 经维度
-     * @param member 元素
+     * @param entries 经维度
      * @return 新添加到键里面的空间元素数量， 不包括那些已经存在但是被更新的元素。
      */
-    Long geoAdd(String key, Point point, Object member);
+    Long geoAdd(String key, GeoEntry... entries);
 
     /**
      * 将给定的空间元素（纬度、经度、名字）添加到指定的键里面。 这些数据会以有序集合的形式被储存在键里面，
@@ -807,10 +720,12 @@ public interface RedisDao {
      * </ul>
      * 当用户尝试输入一个超出范围的经度或者纬度时， GEOADD 命令将返回一个错误。
      * @param key 主键名
-     * @param memberCoordinateMap 成员和经纬度
+     * @param longitude 经度
+     * @param latitude 维度
+     * @param member 值
      * @return 新添加到键里面的空间元素数量， 不包括那些已经存在但是被更新的元素。
      */
-    Long geoAdd(String key, Map<Object, Point> memberCoordinateMap);
+    Long geoAdd(String key, double longitude, double latitude, Object member);
 
     /**
      * 从键里面返回所有给定位置元素的位置（经度和纬度）。<br/>
@@ -820,7 +735,7 @@ public interface RedisDao {
      * @return GEOPOS 命令返回一个数组， 数组中的每个项都由两个元素组成： 第一个元素为给定位置元素的经度， 而第二个元素则为给定位置元素的纬度。<br/>
      *         当给定的位置元素不存在时， 对应的数组项为空值。
      */
-    List<Point> geoPosition(String key, Object... members);
+    Map<Object, GeoPosition> geoPosition(String key, Object... members);
 
     /**
      * 返回两个给定位置之间的距离<br/>
@@ -831,26 +746,20 @@ public interface RedisDao {
      * @param member2 成员2
      * @return 计算出的距离会以双精度浮点数的形式被返回。 如果给定的位置元素不存在， 那么命令返回空值。
      */
-    Distance geoDistance(String key, Object member1, Object member2, Metrics metric);
+    Double geoDistance(String key, Object member1, Object member2, GeoUnit metric);
 
     /**
      * 获取给定地点范围内的 地点信息。时间复杂度为O(N+log(M))，N为指定半径范围内的元素个数，M为要返回的个数
-     * @param key 主键名
-     * @param member 给定地点
-     * @param distance 距离信息
-     * @param args 特殊查询条件，如排序规则、指定数量等
+     * @param key key
+     * @param longitude 对象的经度
+     * @param latitude 对象的纬度
+     * @param radius 以地理单位表示的半径
+     * @param geoUnit 地理单位
+     * @param geoOrder 结果顺序
+     * @param count 结果限制
      * @return 一个范围之内的位置元素。
      */
-    GeoResults<RedisGeoCommands.GeoLocation<Object>> geoRadius(String key, Object member, Distance distance, RedisGeoCommands.GeoRadiusCommandArgs args);
-
-    /**
-     * 获取给定地点范围内的 地点信息。时间复杂度为O(N+log(M))，N为指定半径范围内的元素个数，M为要返回的个数
-     * @param key 主键名
-     * @param circle 指定范围
-     * @param args 特殊查询条件，如排序规则、指定数量等
-     * @return 一个范围之内的位置元素。
-     */
-    GeoResults<RedisGeoCommands.GeoLocation<Object>> geoRadius(String key, Circle circle, RedisGeoCommands.GeoRadiusCommandArgs args);
+    List<Object> geoRadius(String key, double longitude, double latitude, double radius, GeoUnit geoUnit, GeoOrder geoOrder, int count);
 
     /**
      * 返回一个或多个位置元素的 Geohash 表示
@@ -858,7 +767,7 @@ public interface RedisDao {
      * @param members 成员
      * @return 一个数组， 数组的每个项都是一个 geohash 。 命令返回的 geohash 的位置与用户给定的位置元素的位置一一对应。
      */
-    List<String> geohash(String key, Object... members);
+    Map<Object, String> geohash(String key, Object... members);
 
     /**
      * 从列表中删除位置
@@ -866,7 +775,7 @@ public interface RedisDao {
      * @param members 地理位置名
      * @return 被删除的数量
      */
-    Long geoRemove(String key, Object... members);
+    Boolean geoRemove(String key, List<Object> members);
 
     /**
      * 将任意数量的元素添加到指定的 HyperLogLog 里面。<br/>
@@ -881,7 +790,7 @@ public interface RedisDao {
      * @param elements 元素
      * @return 如果 HyperLogLog 的内部储存被修改了， 那么返回 true ， 否则返回 false 。
      */
-    Long logAdd(String key, Object... elements);
+    Boolean logAdd(String key, List<Object> elements);
 
     /**
      * 当 PFCOUNT 命令作用于单个键时， 返回储存在给定键的 HyperLogLog 的近似基数， 如果键不存在， 那么返回 0 。<br/>
@@ -889,23 +798,23 @@ public interface RedisDao {
      * 通过 HyperLogLog 数据结构， 用户可以使用少量固定大小的内存， 来储存集合中的唯一元素 （每个 HyperLogLog 只需使用 12k 字节内存，以及几个字节的内存来储存键本身）。<br/>
      * 命令返回的可见集合（observed set）基数并不是精确值， 而是一个带有 0.81% 标准错误（standard error）的近似值。<br/>
      * 举个例子， 为了记录一天会执行多少次各不相同的搜索查询， 一个程序可以在每次执行搜索查询时调用一次 PFADD ， 并通过调用 PFCOUNT 命令来获取这个记录的近似结果。
-     * @param keys 主键名
+     * @param key 主键名
      * @return 给定 HyperLogLog 包含的唯一元素的近似数量。
      */
-    Long logSize(String... keys);
+    Long logSize(String key);
 
     /**
      * 将多个 HyperLogLog 合并（merge）为一个 HyperLogLog ， 合并后的 HyperLogLog 的基数接近于所有输入 HyperLogLog 的可见集合（observed set）的并集。<br/>
      * 合并得出的 HyperLogLog 会被储存在 destkey 键里面， 如果该键并不存在， 那么命令在执行之前， 会先为该键创建一个空的 HyperLogLog 。
-     * @param destkey 合并后的key
+     * @param key key
      * @param sourcekeys 需要合并的key
      * @return 返回 true
      */
-    Long logUnion(String destkey, String... sourcekeys);
+    void logUnion(String key, String... sourcekeys);
 
     /**
      * 删除HyperLogLog
      * @param key key
      */
-    void logDelete(String key);
+    Boolean logDelete(String key);
 }

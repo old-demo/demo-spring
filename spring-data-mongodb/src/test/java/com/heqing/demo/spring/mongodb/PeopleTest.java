@@ -1,8 +1,7 @@
 package com.heqing.demo.spring.mongodb;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heqing.demo.spring.mongodb.config.SpringMongoDBConfig;
-import com.heqing.demo.spring.mongodb.dao.PeopleDao;
+import com.heqing.demo.spring.mongodb.repository.PeopleRepository;
 import com.heqing.demo.spring.mongodb.model.People;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +24,7 @@ import java.util.*;
 public class PeopleTest {
 
     @Autowired
-    PeopleDao peopleDao;
+    PeopleRepository peopleDao;
 
     @Test
     public void testSave() {

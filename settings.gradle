@@ -5,4 +5,5 @@ include 'spring-data-mybatis'
 include 'spring-data-hibernate'
 include 'spring-data-mongodb'
 include 'spring-data-redis'
+include 'spring-data-neo4j'
 

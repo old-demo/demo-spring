@@ -1,6 +1,6 @@
-package com.heqing.demo.spring.mongodb.dao.impl;
+package com.heqing.demo.spring.mongodb.repository.impl;
 
-import com.heqing.demo.spring.mongodb.dao.BaseDao;
+import com.heqing.demo.spring.mongodb.repository.BaseRepository;
 import com.heqing.demo.spring.mongodb.util.PageInfoUtil;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.List;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-public abstract class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
+public abstract class BaseRepositoryImpl<T, PK extends Serializable> implements BaseRepository<T, PK> {
 
     @Autowired
     protected MongoTemplate mongoTemplate;
@@ -31,7 +31,7 @@ public abstract class BaseDaoImpl<T, PK extends Serializable> implements BaseDao
     protected String collectionName;
     protected final Class<T> persistentClass;
 
-    public BaseDaoImpl(){
+    public BaseRepositoryImpl(){
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         this.persistentClass = (Class) pt.getActualTypeArguments()[0];
 

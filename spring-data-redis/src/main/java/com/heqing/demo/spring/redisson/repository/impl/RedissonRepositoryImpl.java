@@ -1,6 +1,6 @@
-package com.heqing.demo.spring.redisson.dao.impl;
+package com.heqing.demo.spring.redisson.repository.impl;
 
-import com.heqing.demo.spring.redisson.dao.RedissonDao;
+import com.heqing.demo.spring.redisson.repository.RedissonRepository;
 import org.redisson.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 // https://github.com/redisson/redisson/wiki/11.-Redis%E5%91%BD%E4%BB%A4%E5%92%8CRedisson%E5%AF%B9%E8%B1%A1%E5%8C%B9%E9%85%8D%E5%88%97%E8%A1%A8
 @Repository
-public class RedissonDaoImpl implements RedissonDao {
+public class RedissonRepositoryImpl implements RedissonRepository {
 
     @Autowired
     RedissonClient redissonClient;

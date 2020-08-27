@@ -1,6 +1,6 @@
-package com.heqing.demo.spring.redis.dao.impl;
+package com.heqing.demo.spring.redis.repository.impl;
 
-import com.heqing.demo.spring.redis.dao.RedisDao;
+import com.heqing.demo.spring.redis.repository.RedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.DataType;
@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Repository
-public class RedisDaoImpl implements RedisDao {
+public class RedisRepositoryImpl implements RedisRepository {
 
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
