@@ -21,7 +21,8 @@ dependencies {
     // 阿里Json框架
     compile group: 'com.alibaba', name: 'fastjson', version: fastjson_version
     // 构造器注解
-    compile group: 'org.projectlombok', name: 'lombok', version: lombok_version
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
 
     // 测试框架
     testCompile group: 'junit', name: 'junit', version: junit_version

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface PersonRepository extends Neo4jRepository<Person, Long> {
 
     List<Person> findByName(String name);

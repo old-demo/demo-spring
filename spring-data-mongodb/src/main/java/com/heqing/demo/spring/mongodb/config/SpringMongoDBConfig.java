@@ -12,12 +12,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @ComponentScan("com.heqing.demo.spring.mongodb.*")
+@EnableMongoRepositories(basePackages = {"com.heqing.demo.spring.mongodb.repository"})
 public class SpringMongoDBConfig extends AbstractMongoConfiguration {
 
     @Autowired

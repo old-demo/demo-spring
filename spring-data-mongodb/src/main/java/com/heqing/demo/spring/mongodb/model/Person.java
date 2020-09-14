@@ -29,7 +29,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Document(collection = "coll_people")
-public class People implements Serializable {
+public class Person implements Serializable {
 
     @Id
     private Long id;

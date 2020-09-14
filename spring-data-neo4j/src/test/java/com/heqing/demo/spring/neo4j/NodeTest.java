@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,7 +40,27 @@ public class NodeTest {
         params.put("personId", 4);
         params.put("name", "贺小黑");
         params.put("age", 31);
-        neo4jSession.queryForObject(Person.class, cql, params);
+        person = neo4jSession.queryForObject(Person.class, cql, params);
+        System.out.println("--> "+JSONObject.toJSONString(person));
+
+        cql = "MATCH ( person:Person ) WHERE person.person_id={personId} RETURN person";
+        params.put("personId", 4);
+        person = neo4jSession.queryForObject(Person.class, cql, params);
+        System.out.println("--> "+JSONObject.toJSONString(person));
+
+        cql = "CREATE ( person:Person { person_id:{person_id}, name:{name}, age:{age}, gender:{gender}, birthday:{birthday}} ) RETURN person";
+        params = new HashMap<>();
+        params.put("person_id", 14);
+        params.put("name", "贺小黑");
+        params.put("age", 31);
+        params.put("gender", "M");
+        DateTimeFormatter format = DateTimeFormatter.ISO_INSTANT;
+        params.put("birthday", format.format(new Date().toInstant()));
+        System.out.println("--> "+JSONObject.toJSONString(params));
+
+//        CREATE ( person:Person { person_id:14, name:"机器人", age:100, gender:"M", birthday:2020-09-02T19:46:50.030Z} ) RETURN person
+//        person = neo4jSession.queryForObject(Person.class, cql, params);
+//        System.out.println("--> "+JSONObject.toJSONString(person));
     }
 
     @Test

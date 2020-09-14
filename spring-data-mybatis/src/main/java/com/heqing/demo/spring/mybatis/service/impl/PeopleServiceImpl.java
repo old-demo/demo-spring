@@ -90,7 +90,7 @@ public class PeopleServiceImpl implements PeopleService {
         pageNum = pageNum < 1 ? 1 : pageNum;
         pageSize = pageSize < 1 ? 1 : pageSize > 100 ? 100 : pageSize;
         PageHelper.startPage(pageNum, pageSize);
-        PageInfo<People> peoplePage = new PageInfo<People>(peopleDao.listPeople());
+        PageInfo<People> peoplePage = new PageInfo<>(peopleDao.listPeople());
         return new PageInfoUtil(peoplePage.getList(), pageNum, pageSize, peoplePage.getTotal());
     }
 

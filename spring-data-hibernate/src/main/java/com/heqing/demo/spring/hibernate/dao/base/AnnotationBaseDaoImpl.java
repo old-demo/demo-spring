@@ -115,12 +115,10 @@ public class AnnotationBaseDaoImpl<T, PK extends Serializable> extends BaseDaoIm
                     Object object = getMethod.invoke(t);
                     if(object != null) {
                         if (object instanceof Byte || object instanceof Short || object instanceof Integer || object instanceof Long
-                                || object instanceof Character || object instanceof Float || object instanceof Double) {
+                                || object instanceof Character || object instanceof Float || object instanceof Double || object instanceof Boolean) {
                             hql.append(" AND ").append(fieldName).append("=").append(object);
-                        } else if (object instanceof Boolean) {
-
                         } else if (object instanceof Date) {
-
+                            hql.append(" AND ").append(fieldName).append("=").append(((Date) object).getTime());
                         } else if (object instanceof String && !StringUtils.isEmpty(object)) {
                             hql.append(" AND ").append(fieldName).append("='").append(object).append("'");
                         }

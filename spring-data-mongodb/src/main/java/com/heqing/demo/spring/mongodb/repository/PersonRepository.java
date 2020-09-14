@@ -1,16 +1,16 @@
 package com.heqing.demo.spring.mongodb.repository;
 
-import com.heqing.demo.spring.mongodb.model.People;
+import com.heqing.demo.spring.mongodb.model.Person;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
 
-public interface PeopleRepository extends BaseRepository<People, Long> {
+public interface PersonRepository extends BaseRepository<Person, Long> {
 
-    List<People> list(Query query);
+    List<Person> list(Query query);
 
     long count(Query query);
 
-    List<People> listGroupBy(Aggregation aggregation);
+    List<Person> listGroupBy(Aggregation aggregation);
 }
