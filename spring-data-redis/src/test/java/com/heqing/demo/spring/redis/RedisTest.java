@@ -3,7 +3,7 @@ package com.heqing.demo.spring.redis;
 import com.alibaba.fastjson.JSONObject;
 import com.heqing.demo.spring.redis.config.SpringJedisConfig;
 import com.heqing.demo.spring.redis.config.SpringLettuceConfig;
-import com.heqing.demo.spring.redis.dao.RedisDao;
+import com.heqing.demo.spring.redis.repository.RedisRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,61 +29,61 @@ import java.util.concurrent.TimeUnit;
 public class RedisTest {
 
     @Autowired
-    RedisDao redisDao;
+    RedisRepository redisRepository;
 
     @Test
     public void test() {
         // 测试连接模式 单例/哨兵/集群
 //        redisDao.set("deploy", "single");
-        Object result = redisDao.get("deploy");
+        Object result = redisRepository.get("deploy");
         System.out.println("-->"+result);
     }
 
     @Test
     public void testSet() {
-        redisDao.set("test", "heqing");
-        redisDao.set("test1", "shiyan", 1, TimeUnit.MINUTES);
+        redisRepository.set("test", "heqing");
+        redisRepository.set("test1", "shiyan", 1, TimeUnit.MINUTES);
     }
 
     @Test
     public void testGet() {
-        Object result = redisDao.get("test");
+        Object result = redisRepository.get("test");
         System.out.println("-->"+result);
     }
     @Test
     public void testSetGet() {
-        Object result = redisDao.getSet("test", "shiyan");
+        Object result = redisRepository.getSet("test", "shiyan");
         System.out.println("-->"+result);
     }
 
     @Test
     public void testDelete() {
-        Boolean result = redisDao.delete("test");
+        Boolean result = redisRepository.delete("test");
         System.out.println("-->"+result);
     }
 
     @Test
     public void testExpire() {
-        Boolean result = redisDao.expire("test", 1, TimeUnit.MINUTES);
+        Boolean result = redisRepository.expire("test", 1, TimeUnit.MINUTES);
         System.out.println("-->"+result);
     }
 
     @Test
     public void testExpireAt() {
         long time = System.currentTimeMillis() + 1000;
-        Boolean result = redisDao.expireAt("test1", new Date(time));
+        Boolean result = redisRepository.expireAt("test1", new Date(time));
         System.out.println("-->"+result);
     }
 
     @Test
     public void testPersist() {
-        Boolean result = redisDao.persist("test");
+        Boolean result = redisRepository.persist("test");
         System.out.println("-->"+result);
     }
 
     @Test
     public void testDump() {
-        byte[] bytes = redisDao.dump("test");
+        byte[] bytes = redisRepository.dump("test");
         if(bytes != null && bytes.length > 0) {
             System.out.println(bytes+"-->"+bytes.length);
         } else {
@@ -93,326 +93,326 @@ public class RedisTest {
 
     @Test
     public void testCountExistingKeys() {
-        Boolean result = redisDao.countExistingKeys("test");
+        Boolean result = redisRepository.countExistingKeys("test");
         System.out.println("-->"+result);
     }
 
     @Test
     public void testKeys() {
-        Set<String> result = redisDao.keys("test*");
+        Set<String> result = redisRepository.keys("test*");
         System.out.println("-->"+result);
     }
 
     @Test
     public void testMove() {
-        Boolean result = redisDao.move("test1", 1);
+        Boolean result = redisRepository.move("test1", 1);
         System.out.println("-->"+result);
     }
 
     @Test
     public void testRandomKey() {
-        Object result = redisDao.randomKey();
+        Object result = redisRepository.randomKey();
         System.out.println("-->"+result);
     }
 
     @Test
     public void testRename() {
-        redisDao.rename("test1", "test");
+        redisRepository.rename("test1", "test");
     }
 
     @Test
     public void testType() {
-        DataType result = redisDao.type("test");
+        DataType result = redisRepository.type("test");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testAppend() {
-        int result = redisDao.append("test1", "123");
+        int result = redisRepository.append("test1", "123");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testDecrement() {
-        Long result = redisDao.decrement("test1");
+        Long result = redisRepository.decrement("test1");
         System.out.println("-->"+ result);
 
-        result = redisDao.decrement("test1", 10);
+        result = redisRepository.decrement("test1", 10);
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testIncrement() {
-        Long result = redisDao.increment("test1");
+        Long result = redisRepository.increment("test1");
         System.out.println("-->"+ result);
 
-        result = redisDao.increment("test1", 10);
+        result = redisRepository.increment("test1", 10);
         System.out.println("-->"+ result);
 
-        Double resultD = redisDao.increment("test1", 3.1415);
+        Double resultD = redisRepository.increment("test1", 3.1415);
         System.out.println("-->"+ resultD);
     }
 
     @Test
     public void testRange() {
-        String result = redisDao.range("test", 0, -2);
+        String result = redisRepository.range("test", 0, -2);
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testLLeftPush() {
-        Long result = redisDao.lLeftPush("testList", "test1");
+        Long result = redisRepository.lLeftPush("testList", "test1");
         System.out.println("-->"+ result);
 
-        result = redisDao.lLeftPushAll("testList", "test2", "test3");
+        result = redisRepository.lLeftPushAll("testList", "test2", "test3");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testLRightPush() {
-        Long result = redisDao.lRightPush("testList", "test4");
+        Long result = redisRepository.lRightPush("testList", "test4");
         System.out.println("-->"+ result);
 
-        result = redisDao.lRightPushAll("testList", "test5", "test6");
+        result = redisRepository.lRightPushAll("testList", "test5", "test6");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testLIndex() {
-        Object result = redisDao.lIndex("testList", 1);
+        Object result = redisRepository.lIndex("testList", 1);
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testLSize() {
-        Long result = redisDao.lSize("testList");
+        Long result = redisRepository.lSize("testList");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testLLeftPop() {
-        Object result = redisDao.lLeftPop("testList");
+        Object result = redisRepository.lLeftPop("testList");
         System.out.println("-->"+ result);
 
-        result = redisDao.lLeftPop("testList", 1, TimeUnit.MINUTES);
+        result = redisRepository.lLeftPop("testList", 1, TimeUnit.MINUTES);
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testLRightPop() {
-        Object result = redisDao.lRightPop("testList");
+        Object result = redisRepository.lRightPop("testList");
         System.out.println("-->"+ result);
 
-        result = redisDao.lRightPop("testList", 1, TimeUnit.MINUTES);
+        result = redisRepository.lRightPop("testList", 1, TimeUnit.MINUTES);
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testLRange() {
-        List<Object> result = redisDao.lRange("testList", 1, -1);
+        List<Object> result = redisRepository.lRange("testList", 1, -1);
         System.out.println("-->"+ JSONObject.toJSONString(result));
     }
 
     @Test
     public void testLRemove() {
-        Long result = redisDao.lRemove("testList", 1, "test4");
+        Long result = redisRepository.lRemove("testList", 1, "test4");
         System.out.println("-->"+ JSONObject.toJSONString(result));
     }
 
     @Test
     public void testLSet() {
-        redisDao.lSet("testList", 1, "test4");
+        redisRepository.lSet("testList", 1, "test4");
     }
 
     @Test
     public void testLTrim() {
-        redisDao.lTrim("testList", 0, 1);
+        redisRepository.lTrim("testList", 0, 1);
     }
 
     @Test
     public void testsSize() {
-        Long result = redisDao.sSize("testSet");
+        Long result = redisRepository.sSize("testSet");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testsAdd() {
-        redisDao.sAdd("testSet", "test1", "test2");
-        redisDao.sAdd("testSet0", "test1", "test2", "test3");
-        Long result = redisDao.sAdd("testSet1", "test1",  "test3");
+        redisRepository.sAdd("testSet", "test1", "test2");
+        redisRepository.sAdd("testSet0", "test1", "test2", "test3");
+        Long result = redisRepository.sAdd("testSet1", "test1",  "test3");
 
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testsMembers() {
-        Set<Object> set = redisDao.sMembers("testSet");
+        Set<Object> set = redisRepository.sMembers("testSet");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testsIsMember() {
-        Boolean set = redisDao.sIsMember("testSet", "test3");
+        Boolean set = redisRepository.sIsMember("testSet", "test3");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testsDiff() {
         List<String> list = Arrays.asList("testSet1");
-        Set<Object> set = redisDao.sDiff("testSet0", list);
+        Set<Object> set = redisRepository.sDiff("testSet0", list);
         System.out.println("-->"+ JSONObject.toJSONString(set));
 
         list = Arrays.asList( "testSet1");
-        redisDao.sDiffAndStore("testSet0", list, "testSetStore1");
+        redisRepository.sDiffAndStore("testSet0", list, "testSetStore1");
     }
 
     @Test
     public void testsIntersect() {
         List<String> list = Arrays.asList("testSet0", "testSet1");
-        Set<Object> set = redisDao.sIntersect("testSet", list);
+        Set<Object> set = redisRepository.sIntersect("testSet", list);
         System.out.println("-->"+ JSONObject.toJSONString(set));
 
         list = Arrays.asList("testSet1", "testSet0");
-        redisDao.sIntersectAndStore("testSet", list, "testSetStore2");
+        redisRepository.sIntersectAndStore("testSet", list, "testSetStore2");
     }
 
     @Test
     public void testsUnion() {
         List<String> list = Arrays.asList("testSet0", "testSet1");
-        Set<Object> set = redisDao.sUnion("testSet", list);
+        Set<Object> set = redisRepository.sUnion("testSet", list);
         System.out.println("-->"+ JSONObject.toJSONString(set));
 
         list = Arrays.asList("testSet1", "testSet0");
-        redisDao.sUnionStore("testSet", list, "testSetStore3");
+        redisRepository.sUnionStore("testSet", list, "testSetStore3");
     }
 
     @Test
     public void testsMove() {
-        Boolean set = redisDao.sMove("testSet0", "testSet1", "test21");
+        Boolean set = redisRepository.sMove("testSet0", "testSet1", "test21");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testsPop() {
-        Object set = redisDao.sPop("testSet1");
+        Object set = redisRepository.sPop("testSet1");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testsRandember() {
-        Object set = redisDao.sRandember("testSet1");
+        Object set = redisRepository.sRandember("testSet1");
         System.out.println("set-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testsRemove() {
-        Object set = redisDao.sRemove("testSet1", "test1");
+        Object set = redisRepository.sRemove("testSet1", "test1");
         System.out.println("set-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzAdd() {
         for(int i=0; i<3; i++) {
-            Object set = redisDao.zAdd("testSortedSet", "heqing"+i, 10+i);
+            Object set = redisRepository.zAdd("testSortedSet", "heqing"+i, 10+i);
             System.out.println("-->"+ JSONObject.toJSONString(set));
         }
     }
 
     @Test
     public void testzCard() {
-        Object set = redisDao.zCard("testSortedSet");
+        Object set = redisRepository.zCard("testSortedSet");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzCount() {
-        Object set = redisDao.zCount("testSortedSet", 11, 13);
+        Object set = redisRepository.zCount("testSortedSet", 11, 13);
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzIncrby() {
-        Object set = redisDao.zIncrby("testSortedSet", "heqing", -2);
+        Object set = redisRepository.zIncrby("testSortedSet", "heqing", -2);
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzRange() {
-        Set<Object> set = redisDao.zRange("testSortedSet", 1, -2);
+        Set<Object> set = redisRepository.zRange("testSortedSet", 1, -2);
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzRangeByScore() {
-        Set<Object> set = redisDao.zRangeByScore("testSortedSet", 11, 13);
+        Set<Object> set = redisRepository.zRangeByScore("testSortedSet", 11, 13);
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzRank() {
-        Long set = redisDao.zRank("testSortedSet", "heqing2");
+        Long set = redisRepository.zRank("testSortedSet", "heqing2");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzRemove() {
-        Long set = redisDao.zRemove("testSortedSet", "heqing");
+        Long set = redisRepository.zRemove("testSortedSet", "heqing");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzRemoveRange() {
-        Long set = redisDao.zRemoveRange("testSortedSet", 1,3);
+        Long set = redisRepository.zRemoveRange("testSortedSet", 1,3);
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzRemoveRangeByScore() {
-        Long set = redisDao.zRemoveRangeByScore("testSortedSet", 10,15);
+        Long set = redisRepository.zRemoveRangeByScore("testSortedSet", 10,15);
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzReverseRange() {
-        Set<Object> set = redisDao.zReverseRange("testSortedSet", 1,2);
+        Set<Object> set = redisRepository.zReverseRange("testSortedSet", 1,2);
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzRevrangeByScore() {
-        Set<Object> set = redisDao.zRevrangeByScore("testSortedSet", 10,15);
+        Set<Object> set = redisRepository.zRevrangeByScore("testSortedSet", 10,15);
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzReverseRank() {
-        Long set = redisDao.zReverseRank("testSortedSet", "heqing4");
+        Long set = redisRepository.zReverseRank("testSortedSet", "heqing4");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzScore() {
-        Double set = redisDao.zScore("testSortedSet", "heqing4");
+        Double set = redisRepository.zScore("testSortedSet", "heqing4");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzUunionAndStore() {
         List<String> keys = Arrays.asList("testSortedSet", "testSortedSet1");
-        Long set = redisDao.zUnionAndStore("testSortedSet", keys, "zUunionAndStore");
+        Long set = redisRepository.zUnionAndStore("testSortedSet", keys, "zUunionAndStore");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzIntersectAndStore() {
         List<String> keys = Arrays.asList("testSortedSet1");
-        Long set = redisDao.zIntersectAndStore("testSortedSet", keys, "zIntersectAndStore");
+        Long set = redisRepository.zIntersectAndStore("testSortedSet", keys, "zIntersectAndStore");
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
     @Test
     public void testzLexCount() {
-        Long set = redisDao.zLexCount("testSortedSet", 11, 13);
+        Long set = redisRepository.zLexCount("testSortedSet", 11, 13);
         System.out.println("-->"+ JSONObject.toJSONString(set));
     }
 
@@ -423,93 +423,93 @@ public class RedisTest {
         info.put("age", 30);
         info.put("qq", "975656343");
 //        info.put("wechat", "hq0556246512");
-        redisDao.hPutAll("testMap", info);
+        redisRepository.hPutAll("testMap", info);
     }
 
     @Test
     public void testhPut() {
-        redisDao.hPut("testMap", "wechat", "hq0556246512");
+        redisRepository.hPut("testMap", "wechat", "hq0556246512");
     }
 
     @Test
     public void testhDel() {
-        Long result = redisDao.hDelete("testMap", "wechat");
+        Long result = redisRepository.hDelete("testMap", "wechat");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testhExists() {
-        Boolean result = redisDao.hasKey("testMap", "qq");
+        Boolean result = redisRepository.hasKey("testMap", "qq");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testhGet() {
-        Object result = redisDao.hGet("testMap", "qq");
+        Object result = redisRepository.hGet("testMap", "qq");
         System.out.println("-->"+ result);
 
-        Map<Object, Object> map = redisDao.hGet("testMap");
+        Map<Object, Object> map = redisRepository.hGet("testMap");
         System.out.println("-->"+ map);
     }
 
     @Test
     public void testhincrBy() {
-        Long result = redisDao.hIncrement("testMap", "age", 2);
+        Long result = redisRepository.hIncrement("testMap", "age", 2);
         System.out.println("-->"+ result);
 
-        double result1 =  redisDao.hIncrement("testMap", "age", 3.14);
+        double result1 =  redisRepository.hIncrement("testMap", "age", 3.14);
         System.out.println("-->"+ result1);
     }
 
     @Test
     public void testhKeys() {
-        Set<Object> result = redisDao.hKeys("testMap");
+        Set<Object> result = redisRepository.hKeys("testMap");
         System.out.println("-->"+ result);
 
-        List<Object> result1 = redisDao.hVals("testMap");
+        List<Object> result1 = redisRepository.hVals("testMap");
         System.out.println("-->"+ result1);
     }
 
     @Test
     public void testhLen() {
-        Long result = redisDao.hLen("testMap");
+        Long result = redisRepository.hLen("testMap");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testhMget() {
         List<Object> fileList = Arrays.asList("name", "age");
-        List<Object> result = redisDao.hMget("testMap", fileList);
+        List<Object> result = redisRepository.hMget("testMap", fileList);
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testhSetNx() {
-        Boolean result = redisDao.hSetNx("testMap", "age", 30);
+        Boolean result = redisRepository.hSetNx("testMap", "age", 30);
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testgeoAdd() {
-        Long result = redisDao.geoAdd("testGeo", new Point(121.47, 31.23), "shanghai");
+        Long result = redisRepository.geoAdd("testGeo", new Point(121.47, 31.23), "shanghai");
         System.out.println("-->"+ result);
 
         Map<Object, Point> memberCoordinateMap = new HashMap<>();
         memberCoordinateMap.put("anqing", new Point(117.03, 30.52));
         memberCoordinateMap.put("hefei", new Point(117.27, 31.86));
-        result = redisDao.geoAdd("testGeo", memberCoordinateMap);
+        result = redisRepository.geoAdd("testGeo", memberCoordinateMap);
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testgeoPosition() {
-        List<Point> result = redisDao.geoPosition("testGeo", "shanghai", "anqing");
+        List<Point> result = redisRepository.geoPosition("testGeo", "shanghai", "anqing");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testgeoDistance() {
-        Distance result = redisDao.geoDistance("testGeo", "hefei", "anqing", Metrics.KILOMETERS);
+        Distance result = redisRepository.geoDistance("testGeo", "hefei", "anqing", Metrics.KILOMETERS);
         System.out.println("-->"+ JSONObject.toJSONString(result));
     }
 
@@ -517,40 +517,40 @@ public class RedisTest {
     public void testgeoRadius() {
         Distance distance = new Distance(500, Metrics.KILOMETERS);
         RedisGeoCommands.GeoRadiusCommandArgs args = RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs().includeDistance().includeCoordinates().sortAscending().limit(5);
-        GeoResults<RedisGeoCommands.GeoLocation<Object>> result = redisDao.geoRadius("testGeo", "hefei", distance, args);
+        GeoResults<RedisGeoCommands.GeoLocation<Object>> result = redisRepository.geoRadius("testGeo", "hefei", distance, args);
         System.out.println("-->"+ JSONObject.toJSONString(result));
 
         Circle circle = new Circle(116.405285, 39.904989, Metrics.KILOMETERS.getMultiplier());
-        result = redisDao.geoRadius("testGeo", circle, args);
+        result = redisRepository.geoRadius("testGeo", circle, args);
         System.out.println("-->"+ JSONObject.toJSONString(result));
     }
 
     @Test
     public void testgeohash() {
-        List<String> result = redisDao.geohash("testGeo", "shanghai", "anqing");
+        List<String> result = redisRepository.geohash("testGeo", "shanghai", "anqing");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testgeoRemove() {
-        Long result = redisDao.geoRemove("testGeo", "hefei");
+        Long result = redisRepository.geoRemove("testGeo", "hefei");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testlogAdd() {
-        Long result = redisDao.logAdd("log", "test1", "test2");
+        Long result = redisRepository.logAdd("log", "test1", "test2");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testlogSize() {
-        Long result = redisDao.logSize("log");
+        Long result = redisRepository.logSize("log");
         System.out.println("-->"+ result);
     }
 
     @Test
     public void testlogDelete() {
-        redisDao.logDelete("log");
+        redisRepository.logDelete("log");
     }
 }
