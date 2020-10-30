@@ -1,0 +1,41 @@
+//PUT /demo_item
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "ik_smart_pinyin": {
+          "type": "custom",
+          "tokenizer": "ik_smart",
+          "filter": "pinyin_filter"
+        },
+        "ik_max_word_pinyin": {
+          "type": "custom",
+          "tokenizer": "ik_max_word",
+          "filter": "pinyin_filter"
+        }
+      },
+      "filter": {
+        "pinyin_filter": {
+          "type" : "pinyin",
+          "keep_separate_first_letter" : true,
+          "keep_full_pinyin" : true,
+          "keep_original" : true,
+          "limit_first_letter_length" : 16,
+          "lowercase" : true,
+          "remove_duplicated_term" : true
+        }
+      }
+    }
+  },
+  "mappings":{
+    "properties":{
+      "id":{"type":"text"},
+      "name":{"type":"text","analyzer": "ik_max_word_pinyin"},
+      "desc":{"type":"text"},
+      "brand":{"type":"text"},
+      "price":{"type":"double"},
+      "is-delete":{"type":"integer"},
+      "create-date":{"type":"date","format": "basic_date_time"}
+    }
+  }
+}

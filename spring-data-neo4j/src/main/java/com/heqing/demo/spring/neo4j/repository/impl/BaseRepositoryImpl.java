@@ -23,7 +23,7 @@ import java.util.List;
 
 public abstract class BaseRepositoryImpl<T, PK extends Serializable> implements BaseRepository<T, PK> {
 
-    private static final DateTimeFormatter format = DateTimeFormatter.ISO_INSTANT;
+    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ISO_INSTANT;
 
     @Autowired
     Session neo4jSession;
@@ -88,7 +88,7 @@ public abstract class BaseRepositoryImpl<T, PK extends Serializable> implements 
                                 || object instanceof Character || object instanceof Float || object instanceof Double || object instanceof Boolean) {
                             value = object;
                         } else if (object instanceof Date) {
-                            value = "'" + format.format(((Date) object).toInstant()) + "'";
+                            value = "'" + FORMAT.format(((Date) object).toInstant()) + "'";
                         } else if (object instanceof String && !StringUtils.isEmpty(object)) {
                             value = JSONObject.toJSONString(object);
                         }

@@ -6,10 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 @Entity
 @Table
 public class Teacher implements Serializable {

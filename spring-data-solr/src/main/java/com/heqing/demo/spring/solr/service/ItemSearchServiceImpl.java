@@ -18,7 +18,6 @@ public class ItemSearchServiceImpl {
     @Autowired
     private SolrTemplate solrTemplate;
 
-
     /**
      * 查询分类列表 category  根据搜索关键字分组查询
      */

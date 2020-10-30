@@ -1,0 +1,11 @@
+{
+  "properties":{
+    "id":{"type":"text"},
+    "name":{"type":"text","analyzer": "ik_max_word_pinyin"},
+    "desc":{"type":"text"},
+    "brand":{"type":"text"},
+    "price":{"type":"float"},
+    "isdelete":{"type":"integer"},
+    "createTime":{"type":"date"}
+  }
+}

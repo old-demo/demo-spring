@@ -9,7 +9,7 @@ public class MyListener {
 
     @Async
     @EventListener
-    public void MyEventDone(MyEvent myEvent){
+    public void myEventDone(MyEvent myEvent){
         String msg = myEvent.getMsg();
         System.out.println("好的，我知道你已完成："+msg);
     }

@@ -2,7 +2,9 @@ package com.heqing.demo.spring.convert;
 
 public enum PersonEnum {
 
+    /* 大人 */
     ADULT(0,  "大人"),
+    /* 小孩 */
     CHILD(1, "小孩");
 
     private final Integer value;

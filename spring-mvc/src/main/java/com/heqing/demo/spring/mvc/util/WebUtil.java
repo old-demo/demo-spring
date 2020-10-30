@@ -18,7 +18,7 @@ public class WebUtil {
             ip = request.getRemoteAddr();
         }
 
-        return ip.equalsIgnoreCase("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
+        return "0:0:0:0:0:0:0:1".equalsIgnoreCase(ip) ? "127.0.0.1" : ip;
     }
 
 }

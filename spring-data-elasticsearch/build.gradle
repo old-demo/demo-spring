@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: spring_version
+    compile group: 'org.springframework', name: 'spring-web', version: spring_version
+    compile group: 'org.springframework.data', name: 'spring-data-elasticsearch', version: '4.0.0.RELEASE'
+
+    // 汉字拆拼音
+    compile group: 'com.github.stuxuhai', name: 'jpinyin', version: '1.1.8'
+
+    // 日志框架
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: log4j_version
+    // 阿里Json框架
+    compile group: 'com.alibaba', name: 'fastjson', version: fastjson_version
+    // 构造器注解
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
+
+    testCompile group: 'org.springframework', name: 'spring-test', version: spring_version
+    testCompile group: 'junit', name: 'junit', version: junit_version
+}

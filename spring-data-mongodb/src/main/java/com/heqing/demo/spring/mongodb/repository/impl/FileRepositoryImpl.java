@@ -29,7 +29,7 @@ public class FileRepositoryImpl implements FileRepository {
     GridFsTemplate gridFsTemplate;
 
     @Autowired
-    GridFSBucket gridFSBucket;
+    GridFSBucket gridFsBucket;
 
     @Override
     public String uploadFile(String localFilePath, String originFileName) {
@@ -56,7 +56,7 @@ public class FileRepositoryImpl implements FileRepository {
     public void downLoadByFileId(String id, String localFilePath) {
         GridFSFile gridFsFile = gridFsTemplate.findOne(new Query().addCriteria(Criteria.where("_id").is(id)));
         if(gridFsFile != null) {
-            GridFSDownloadStream gridFsDownloadStream = gridFSBucket.openDownloadStream(gridFsFile.getFilename());
+            GridFSDownloadStream gridFsDownloadStream = gridFsBucket.openDownloadStream(gridFsFile.getFilename());
             if (gridFsDownloadStream != null) {
                 GridFsResource gridFsResource = new GridFsResource(gridFsFile, gridFsDownloadStream);
 
@@ -98,9 +98,9 @@ public class FileRepositoryImpl implements FileRepository {
 
     @Override
     public List<MongoFile> searchFile(Query query) {
-        GridFSFindIterable gridFSFindIterable = gridFsTemplate.find(query);
+        GridFSFindIterable gridFsFindIterable = gridFsTemplate.find(query);
         List<MongoFile> fileList = new ArrayList<>();
-        for (GridFSFile file : gridFSFindIterable) {
+        for (GridFSFile file : gridFsFindIterable) {
             MongoFile mongoFile = new MongoFile();
             mongoFile.setFileId(getFileId(file.getId().toString()));
             mongoFile.setFileName(file.getFilename());

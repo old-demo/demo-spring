@@ -6,10 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-@NoArgsConstructor
-@Setter
-@Getter
-@ToString
+@Data
 public class TeacherXml implements Serializable {
 
 	private long id;

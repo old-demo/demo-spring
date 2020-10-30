@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
@@ -13,6 +14,16 @@ public class OrikaTest {
     private final static MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
     private final static MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+
+    @Before
+    public void mapperRegister() {
+        // 注意该classMap 只能注册一次。 否则会 java.lang.OutOfMemoryError: PermGen space
+        mapperFactory.classMap(PersonBO.class, PersonDTO.class)
+                .field("sex", "gender")
+                .field("nameParts[0]", "firstName")
+                .field("nameParts[1]", "lastName")
+                .byDefault().register();
+    }
 
     @Test
     public void testBase() {
@@ -43,11 +54,6 @@ public class OrikaTest {
         personBO.setRemarkJson(remark.toJSONString());
 
         System.out.println("BO --> "+personBO);
-        mapperFactory.classMap(PersonBO.class, PersonDTO.class)
-                .field("sex", "gender")
-                .field("nameParts[0]", "firstName")
-                .field("nameParts[1]", "lastName")
-                .byDefault().register();
         PersonDTO personDTO = new PersonDTO();
         mapperFacade.map(personBO, personDTO);
         System.out.println("DTO --> "+personDTO);
@@ -78,11 +84,6 @@ public class OrikaTest {
         }
 
         System.out.println("DTO --> "+JSONObject.toJSONString(personDTOList));
-        mapperFactory.classMap(PersonBO.class, PersonDTO.class)
-                .field("sex", "gender")
-                .field("nameParts[0]", "firstName")
-                .field("nameParts[1]", "lastName")
-                .byDefault().register();
         List<PersonBO> personBOList = mapperFacade.mapAsList(personDTOList, PersonBO.class);
         System.out.println("BO --> "+JSONObject.toJSONString(personBOList));
     }
