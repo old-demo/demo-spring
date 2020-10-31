@@ -1,11 +1,27 @@
 {
-  "properties":{
-    "id":{"type":"text"},
-    "name":{"type":"text","analyzer": "ik_max_word_pinyin"},
-    "desc":{"type":"text"},
-    "brand":{"type":"text"},
-    "price":{"type":"float"},
-    "isdelete":{"type":"integer"},
-    "createTime":{"type":"date"}
-  }
+    "properties":{
+      "create-date":{
+        "format":"basic_date_time",
+        "type":"date"
+      },
+      "price":{
+        "type":"double"
+      },
+      "name":{
+        "analyzer":"ik_max_word_pinyin",
+        "type":"text"
+      },
+      "is-delete":{
+        "type":"integer"
+      },
+      "id":{
+        "type":"text"
+      },
+      "brand":{
+        "type":"text"
+      },
+      "desc":{
+        "type":"text"
+      }
+    }
 }

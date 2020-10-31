@@ -21,7 +21,6 @@ indexStoreType：索引文件存储类型
 @Document(indexName = "demo_item", shards = 5,replicas = 0)
 @NoArgsConstructor
 @Data
-//@Mapping(mappingPath="es_demo_item.json")
 @Setting(settingPath = "/settings/demo_item.json")
 @Mapping(mappingPath = "/mappings/demo_item.json")
 public class Item implements Persistable<String> {

@@ -1,27 +1,27 @@
 {
-  "settings": {
-    "analysis": {
-      "analyzer": {
-        "ik_smart_pinyin": {
-          "type": "custom",
-          "tokenizer": "ik_smart",
-          "filter": "pinyin_filter"
-        },
-        "ik_max_word_pinyin": {
-          "type": "custom",
-          "tokenizer": "ik_max_word",
-          "filter": "pinyin_filter"
+  "index":{
+    "analysis":{
+      "filter":{
+        "pinyin_filter":{
+          "lowercase":"true",
+          "keep_original":"true",
+          "remove_duplicated_term":"true",
+          "keep_separate_first_letter":"true",
+          "type":"pinyin",
+          "limit_first_letter_length":"16",
+          "keep_full_pinyin":"true"
         }
       },
-      "filter": {
-        "pinyin_filter": {
-          "type" : "pinyin",
-          "keep_separate_first_letter" : true,
-          "keep_full_pinyin" : true,
-          "keep_original" : true,
-          "limit_first_letter_length" : 16,
-          "lowercase" : true,
-          "remove_duplicated_term" : true
+      "analyzer":{
+        "ik_max_word_pinyin":{
+          "filter":"pinyin_filter",
+          "type":"custom",
+          "tokenizer":"ik_max_word"
+        },
+        "ik_smart_pinyin":{
+          "filter":"pinyin_filter",
+          "type":"custom",
+          "tokenizer":"ik_smart"
         }
       }
     }

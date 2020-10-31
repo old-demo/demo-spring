@@ -131,7 +131,7 @@ public class TestItem {
     @Test
     public void testHighlight() {
         List<Item> itemList = new ArrayList<>();
-        List<SearchHit<Item>> dataList = itemRepository.findByName("华");
+        List<SearchHit<Item>> dataList = itemRepository.findByName("hw");
         System.out.println("-->"+ JSONObject.toJSONString(dataList));
         for(SearchHit<Item> data : dataList) {
             Item item = data.getContent();
