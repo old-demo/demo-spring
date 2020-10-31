@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+ext {
+    // strtus2框架版本
+    struts2 = '2.3.37'
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: spring_version
+    compile group: 'org.springframework', name: 'spring-web', version: spring_version
+
+    // strtus2框架
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+    compile group: 'org.apache.struts', name: 'struts2-core', version: struts2
+    compile group: 'org.apache.struts', name: 'struts2-spring-plugin', version: struts2
+    compile group: 'org.apache.struts', name: 'struts2-convention-plugin', version: struts2
+    compile group: 'org.apache.struts', name: 'struts2-json-plugin', version: struts2
+
+    // 上传文件
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+
+    // 阿里Json框架
+    compile group: 'com.alibaba', name: 'fastjson', version: fastjson_version
+    // 日志框架
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: log4j_version
+
+    testCompile group: 'junit', name: 'junit', version: junit_version
+    testCompile group: 'org.springframework', name: 'spring-test', version: spring_version
+
+}
