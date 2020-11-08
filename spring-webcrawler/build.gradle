@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+
+    compile group: 'org.springframework', name: 'spring-context', version: spring_version
+    compile group: 'org.springframework', name: 'spring-aspects', version: spring_version
+
+    // webmagic 中依赖低版本的 jsoup。引入高版本报错
+//    compile group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+
+    compile group: 'us.codecraft', name: 'webmagic-core', version: '0.7.4'
+    compile group: 'us.codecraft', name: 'webmagic-extension', version: '0.7.4'
+
+    compile group: 'com.geccocrawler', name: 'gecco', version: '1.3.0'
+
+    compile group: 'cn.edu.hfut.dmic.webcollector', name: 'WebCollector', version: '2.73-alpha'
+
+    // 阿里Json框架
+    compile group: 'com.alibaba', name: 'fastjson', version: fastjson_version
+    // 构造器注解
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
+
+    testCompile group: 'org.springframework', name: 'spring-test', version: spring_version
+    testCompile group: 'junit', name: 'junit', version: junit_version
+}

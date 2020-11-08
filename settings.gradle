@@ -9,4 +9,5 @@ include 'spring-data-redis'
 include 'spring-data-neo4j'
 include 'spring-data-solr'
 include 'spring-data-elasticsearch'
+include 'spring-webcrawler'
 
