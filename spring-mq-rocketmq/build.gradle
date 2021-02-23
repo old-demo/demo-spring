@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+
+    compile group: 'org.springframework', name: 'spring-context', version: spring_version
+    compile group: 'org.springframework', name: 'spring-aspects', version: spring_version
+
+//    compile group: 'com.aliyun', name: 'aliyun-java-sdk-ons', version: '3.1.6'
+    compile group: 'com.aliyun.openservices', name: 'ons-client', version: '1.8.7.1.Final'
+
+    // 阿里Json框架
+    compile group: 'com.alibaba', name: 'fastjson', version: fastjson_version
+    // 构造器注解
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
+
+    testCompile group: 'org.springframework', name: 'spring-test', version: spring_version
+    testCompile group: 'junit', name: 'junit', version: junit_version
+}

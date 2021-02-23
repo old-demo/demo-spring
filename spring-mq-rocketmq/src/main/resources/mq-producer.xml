@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--&lt;!&ndash; 加载外部的properties配置文件 &ndash;&gt;-->
+	<!--<context:property-placeholder location="classpath:mq.properties"/>-->
+
+	<import resource="common.xml"/>
+
+	<bean id="normalProducer" class="com.aliyun.openservices.ons.api.bean.ProducerBean"
+		  init-method="start" destroy-method="shutdown">
+		<property name="properties">
+			<props>
+				<prop key="AccessKey">${accesskey.id}</prop>
+				<prop key="SecretKey">${accessKey.secret}</prop>
+				<prop key="GROUP_ID">${groupId.normal}</prop>
+				<prop key="NAMESRV_ADDR">${namesrv.addr}</prop>
+			</props>
+		</property>
+	</bean>
+</beans>

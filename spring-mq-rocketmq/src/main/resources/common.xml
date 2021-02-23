@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder properties-ref="commonProperties"/>
+    <bean id="commonProperties"  class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="accesskey.id">LTAI4G4zoFHFXzpBwVqyJ1fb</prop>
+                <prop key="accessKey.secret">oVn4AznRaZ6rokTcFF8Dn1IGckZWvj</prop>
+                <prop key="namesrv.addr">http://1137904576193554.mqrest.cn-beijing.aliyuncs.com</prop>
+                <prop key="tag">mq_rocketmq_test_tag</prop>
+
+                <!-- 普通消息 -->
+                <prop key="topic.normal">TOPIC_demo_rocketmq_normal</prop>
+                <prop key="groupId.normal">GID_demo_rocketmq_normal</prop>
+
+                <!-- 定时和延时消息 -->
+                <prop key="topic.batch">TOPIC_demo_rocketmq_batch</prop>
+                <prop key="groupId.batch">GID_demo_rocketmq_batch</prop>
+
+                <!-- 顺序消息 -->
+                <prop key="topic.order">TOPIC_demo_rocketmq_order</prop>
+                <prop key="groupId.order">GID_demo_rocketmq_order</prop>
+
+                <!-- 事务消息 -->
+                <prop key="topic.transaction">TOPIC_demo_rocketmq_transaction</prop>
+                <prop key="groupId.transaction">GID_demo_rocketmq_transaction</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

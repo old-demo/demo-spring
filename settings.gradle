@@ -10,4 +10,6 @@ include 'spring-data-neo4j'
 include 'spring-data-solr'
 include 'spring-data-elasticsearch'
 include 'spring-webcrawler'
+include 'spring-mq-rocketmq'
+include 'spring-mq-activemq'
 
