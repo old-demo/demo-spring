@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://code.alibabatech.com/schema/dubbo
+                           http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="spring-dubbo-producer" />
+
+	<!-- 这里使用的注册中心是zookeeper -->
+	<dubbo:registry address="zookeeper://zk1.test.***.com:2181" client="zkclient"/>
+
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<dubbo:protocol name="dubbo" port="20880" />
+
+	<!-- 监控的配置 -->
+	<dubbo:monitor protocol="registry"></dubbo:monitor>
+
+	<bean id="demoProducerService" class="com.heqing.demo.spring.dubbo.service.impl.DemoProducerServiceImpl" />
+
+	<!-- 将该接口暴露到dubbo中 -->
+	<dubbo:service interface="com.heqing.demo.spring.dubbo.service.DemoProducerService" ref="demoProducerService" timeout="6000" retries="0"/>
+
+</beans>

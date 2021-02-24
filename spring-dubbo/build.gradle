@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: spring_version
+    compile group: 'org.springframework', name: 'spring-aspects', version: spring_version
+
+    implementation group: 'org.apache.zookeeper', name: 'zookeeper', version: '3.6.0'
+    implementation group: 'com.github.sgroschupf', name: 'zkclient', version: '0.1'
+    implementation (group: 'com.alibaba', name: 'dubbo', version: '2.6.9'){
+        exclude group: 'org.springframework'
+    }
+
+    implementation group: 'com.yyw.gps', name: 'gps-api', version: '1.0.0-SNAPSHOT'
+
+    testCompile group: 'org.springframework', name: 'spring-test', version: spring_version
+    testCompile group: 'junit', name: 'junit', version: junit_version
+}

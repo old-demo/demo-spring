@@ -12,4 +12,5 @@ include 'spring-data-elasticsearch'
 include 'spring-webcrawler'
 include 'spring-mq-rocketmq'
 include 'spring-mq-activemq'
+include 'spring-dubbo'
 
